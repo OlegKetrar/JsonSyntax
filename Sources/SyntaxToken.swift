@@ -6,7 +6,7 @@
 //  Copyright © 2019 Oleg Ketrar. All rights reserved.
 //
 
-public enum SyntaxToken {
+public enum SyntaxToken: Equatable {
     case key(String)
     case stringValue(String)
     case integerValue(Int)

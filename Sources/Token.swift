@@ -25,7 +25,6 @@ public enum Token: Equatable {
 
     case syntax(Syntax)
     case string(String)
-    case double(Double)
-    case integer(Int)
+    case number(String)
     case literal(Literal)
 }

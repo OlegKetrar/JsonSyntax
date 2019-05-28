@@ -36,7 +36,7 @@ final class LexerValidTests: XCTestCase {
             .syntax(.comma),
             .string("age"),
             .syntax(.colon),
-            .integer(10),
+            .number("10"),
             .syntax(.comma),
             .string("male"),
             .syntax(.colon),

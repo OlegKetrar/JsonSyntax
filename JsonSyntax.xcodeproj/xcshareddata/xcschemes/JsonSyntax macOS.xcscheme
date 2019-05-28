@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "553AA7FC22930377002570E3"
+               BlueprintIdentifier = "55E0D4BC229DEA04007286ED"
                BuildableName = "JsonSyntax.framework"
-               BlueprintName = "JsonSyntax"
+               BlueprintName = "JsonSyntax macOS"
                ReferencedContainer = "container:JsonSyntax.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,26 +28,7 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "553AA80522930377002570E3"
-               BuildableName = "JsonSyntaxTests.xctest"
-               BlueprintName = "JsonSyntaxTests"
-               ReferencedContainer = "container:JsonSyntax.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "553AA7FC22930377002570E3"
-            BuildableName = "JsonSyntax.framework"
-            BlueprintName = "JsonSyntax"
-            ReferencedContainer = "container:JsonSyntax.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -64,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "553AA7FC22930377002570E3"
+            BlueprintIdentifier = "55E0D4BC229DEA04007286ED"
             BuildableName = "JsonSyntax.framework"
-            BlueprintName = "JsonSyntax"
+            BlueprintName = "JsonSyntax macOS"
             ReferencedContainer = "container:JsonSyntax.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -82,9 +63,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "553AA7FC22930377002570E3"
+            BlueprintIdentifier = "55E0D4BC229DEA04007286ED"
             BuildableName = "JsonSyntax.framework"
-            BlueprintName = "JsonSyntax"
+            BlueprintName = "JsonSyntax macOS"
             ReferencedContainer = "container:JsonSyntax.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

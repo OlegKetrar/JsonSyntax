@@ -103,18 +103,10 @@ private extension Lexer {
             }
         }
 
-        let rest = String( str[jsonNumber.endIndex...] )
-
         if jsonNumber.isEmpty {
             return (nil, str)
-
-        } else if jsonNumber.contains(".") {
-            guard let doubleNumber = Double( jsonNumber ) else { return (nil, str) }
-            return (.double(doubleNumber), rest)
-
         } else {
-            guard let intNumber = Int( jsonNumber ) else { return (nil, str) }
-            return (.integer(intNumber), rest)
+            return (.number(jsonNumber), String(str[jsonNumber.endIndex...]))
         }
     }
 

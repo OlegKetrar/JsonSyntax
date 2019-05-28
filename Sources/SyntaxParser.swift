@@ -37,11 +37,8 @@ private extension SyntaxParser {
         }
 
         switch token {
-        case let .double(val):
-            return ([.doubleValue(val)], Array(tokens.dropFirst()))
-
-        case let .integer(val):
-            return ([.integerValue(val)], Array(tokens.dropFirst()))
+        case let .number(valStr):
+            return ([ try parseNumber(valStr) ], Array(tokens.dropFirst()))
 
         case let .string(val):
             return ([.stringValue(val)], Array(tokens.dropFirst()))
@@ -180,6 +177,27 @@ private extension SyntaxParser {
             }
         }
     }
+
+    func parseNumber(_ str: String) throws -> SyntaxToken {
+
+        guard str.isValidJsonNumber else {
+            throw Error.parser(.errorInvalidSyntax)
+        }
+
+        if let val = Int(str) {
+            return .integerValue(val)
+
+        } else if let val = Double(str) {
+            if let int = Int(exactly: val), val == Double(int) {
+                return .integerValue(int)
+            } else {
+                return .doubleValue(val)
+            }
+
+        } else {
+            throw Error.parser("parsed number too big")
+        }
+    }
 }
 
 // MARK: - Convenience
@@ -188,5 +206,90 @@ private extension String {
 
     static var errorInvalidSyntax: String {
         return "invalid syntax"
+    }
+
+    var isValidExponent: Bool {
+        return false
+    }
+
+    var isValidJsonNumber: Bool {
+        guard let firstChar = first,
+            firstChar == "-" || firstChar.isJsonNumber else { return false }
+
+        guard count > 1 else {
+            // only digits are valid chars for 1-length number token
+            return firstChar.isJsonNumber
+        }
+
+        let secondChar = self[index(after: startIndex)]
+
+        // eliminate leading zero
+        if firstChar == "-" {
+            if secondChar == "0" {
+                let thirdIndex = index(startIndex, offsetBy: 2)
+
+                if indices.contains(thirdIndex) {
+                    guard self[thirdIndex].isDotOrExp else { return false }
+                } else {
+                    return false
+                }
+            }
+
+        } else {
+            if firstChar == "0" {
+                guard secondChar.isDotOrExp else { return false }
+            }
+        }
+
+        var hasExp: Bool = false
+        var hasDot: Bool = false
+        var previousChar: Character = firstChar
+
+        // start from second
+        for char in self[index(after: startIndex)...] {
+
+            switch char {
+            case let n where n.isJsonNumber: break
+
+            // leading `-` already allowed
+            case "-" where previousChar.isExp: break
+            case "+" where previousChar.isExp: break
+            case "e" where !hasExp && previousChar.isJsonNumber,
+                 "E" where !hasExp && previousChar.isJsonNumber:
+                hasExp = true
+
+            // dot can't be after `e`
+            case "." where !hasDot && !hasExp && previousChar.isJsonNumber:
+                hasDot = true
+
+            default:
+                return false
+            }
+
+            previousChar = char
+        }
+
+        guard last!.isJsonNumber else { return false }
+        return true
+    }
+}
+
+private extension Character {
+
+    var isJsonNumber: Bool {
+        let digits: ClosedRange<Int> = 0...9
+        return digits.map { Character("\($0)") }.contains(self)
+    }
+
+    var isDotOrExp: Bool {
+        return self == "." || self.isExp
+    }
+
+    var isExp: Bool {
+        return self == "e" || self == "E"
+    }
+
+    var isSign: Bool {
+        return self == "-" || self == "+"
     }
 }

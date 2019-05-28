@@ -24,8 +24,7 @@ extension Token: CustomStringConvertible {
         switch self {
         case let .syntax(s): return "syntax(\(s))"
         case let .string(s): return "string(\(s))"
-        case let .double(d): return "double(\(d))"
-        case let .integer(n): return "integer(\(n))"
+        case let .number(d): return "number(\(d))"
         case let .literal(l): return "literal\(l)"
         }
     }

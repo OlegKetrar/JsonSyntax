@@ -6,15 +6,16 @@
 //  Copyright © 2019 Oleg Ketrar. All rights reserved.
 //
 
-public enum SyntaxToken: Equatable {
-    case key(String)
-    case stringValue(String)
-    case integerValue(Int)
-    case doubleValue(Double)
-    case braces
-    case brackets
-    case boolValue
-    case null
-    case comma
-    case colon
+public struct SyntaxToken: Equatable {
+
+    public enum Kind: Equatable {
+        case syntax(SyntaxCharacter)
+        case key
+        case stringValue
+        case numberValue
+        case literalValue(Literal)
+    }
+
+    public var kind: Kind
+    public var range: Range<String.Index>
 }

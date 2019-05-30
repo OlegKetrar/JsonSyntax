@@ -9,51 +9,51 @@
 struct Lexer {
 
     func lex(_ string: String) throws -> [Token] {
-        var mutStr = string
+        guard !string.isEmpty else { return [] }
+
+        var index: String.Index = string.startIndex
         var tokens: [Token] = []
 
-        while mutStr.count > 0 {
+        while index < string.endIndex {
 
-            let (jsonString, rest1) = try lexString(mutStr)
-            mutStr = rest1
-            if let strToken = jsonString {
-                tokens.append(strToken)
+            if let (tokenKind, length) = try lexString(string, location: index) {
+                let endIndex = string.index(index, offsetBy: length)
+                tokens.append(Token(kind: tokenKind, range: index..<endIndex))
+
+                index = endIndex
                 continue
             }
 
-            let (jsonNumber, rest2) = try lexNumber(mutStr)
-            mutStr = rest2
-            if let numberToken = jsonNumber {
-                tokens.append(numberToken)
+            if let (tokenKind, length) = try lexLiteral(string, location: index) {
+                let endIndex = string.index(index, offsetBy: length)
+                tokens.append(Token(kind: tokenKind, range: index..<endIndex))
+
+                index = endIndex
                 continue
             }
 
-            let (jsonBool, rest3) = try lexBool(mutStr)
-            mutStr = rest3
-            if let boolToken = jsonBool {
-                tokens.append(boolToken)
+            if let (tokenKind, length) = try lexNumber(string, location: index) {
+                let endIndex = string.index(index, offsetBy: length)
+                tokens.append(Token(kind: tokenKind, range: index..<endIndex))
+
+                index = endIndex
                 continue
             }
 
-            let (jsonNull, rest4) = try lexNull(mutStr)
-            mutStr = rest4
-            if let nullToken = jsonNull {
-                tokens.append(nullToken)
-                continue
-            }
+            if string[index].isJsonWhitespace {
+                index = string.index(after: index)
 
-            guard let char = mutStr.first else { break }
+            } else if let syntaxChar = SyntaxCharacter(rawValue: string[index]) {
 
-            if char.isJsonWhitespace {
-                // ignore whitespace
-                _ = mutStr.removeFirst()
+                tokens.append(Token(
+                    kind:
+                    .syntax(syntaxChar),
+                    range: index..<string.index(after: index)))
 
-            } else if let syntaxChar = char.jsonSyntax {
-                tokens.append(.syntax(syntaxChar))
-                _ = mutStr.removeFirst()
+                index = string.index(after: index)
 
             } else {
-                throw Error.lexer("unexpected character: \(char)")
+                throw Error.lexer("unexpected character: \(string[index])")
             }
         }
 
@@ -64,77 +64,68 @@ struct Lexer {
 // MARK: - Private
 
 private extension Lexer {
+    typealias PartialToken = (type: Token.Kind, length: Int)
 
-     func lexString(_ str: String) throws -> (Token?, String) {
-        var mutStr = str
-        var jsonStr = ""
+    func lexString(_ str: String, location: String.Index) throws -> PartialToken? {
+        guard str[location].isJsonQuote else { return nil }
 
-        guard let firstChar = mutStr.first,
-            firstChar.isJsonQuote else { return (nil, str) }
+        var length: Int = 2
+        var jsonStr: String = ""
+        var index: String.Index = str.index(after: location)
 
-        _ = mutStr.removeFirst()
+        while true {
+            guard index <= str.endIndex else { break }
 
-        for char in mutStr {
+            let char = str[index]
 
             if char.isJsonQuote {
-                // we need shift index by +1 because
-                // `jsonStr` don't have `"` at the begining, but `str` have
-                let nextAfterClosingQuote = str.index(jsonStr.endIndex, offsetBy: 2)
-                return (.string(jsonStr), String( str[nextAfterClosingQuote...] ))
+                return (.string(jsonStr), length)
             } else {
                 jsonStr.append(char)
+                length += 1
+
+                index = str.index(after: index)
             }
         }
 
-        throw Error.lexer("Excpected end-of-string quote")
+        throw Error.lexer("Expected end-of-string quote")
     }
 
-    func lexNumber(_ str: String) throws -> (Token?, String) {
+    func lexLiteral(_ str: String, location: String.Index) throws -> PartialToken? {
+        let subStr = str[location...]
+
+        switch true {
+
+        case subStr.hasPrefix(Literal.true.rawValue):
+            return (.literal(.true), 4) // "true".count
+        case subStr.hasPrefix(Literal.false.rawValue):
+            return (.literal(.false), 5) // "false".count
+        case subStr.hasPrefix(Literal.null.rawValue):
+            return (.literal(.null), 4) // "null".count
+        default:
+            return nil
+        }
+    }
+
+    func lexNumber(_ str: String, location: String.Index) throws -> PartialToken? {
+        let digitChars = (0...9).map { Character("\($0)") }
+        let allowedChars = digitChars + [".", "e", "E", "-", "+"]
+
         var jsonNumber = ""
-        let numberChars: [String] = (0...9).map(String.init) + ["-", "e", "."]
+        var length: Int = 0
 
-        for char in str {
-            let c = String(char)
+        for char in str[location...] {
+            guard allowedChars.contains(char) else { break }
 
-            if numberChars.contains(c) {
-                jsonNumber += c
-            } else {
-                break
-            }
+            jsonNumber.append(char)
+            length += 1
         }
 
         if jsonNumber.isEmpty {
-            return (nil, str)
+            return nil
         } else {
-            return (.number(jsonNumber), String(str[jsonNumber.endIndex...]))
+            return (.number(jsonNumber), length)
         }
-    }
-
-    func lexBool(_ str: String) throws -> (Token?, String) {
-        if str.hasPrefix(Token.Literal.true.rawValue) {
-            return (
-                .literal(.true),
-                String(str[Token.Literal.true.rawValue.endIndex...]))
-
-        } else if str.hasPrefix(Token.Literal.false.rawValue) {
-            return (
-                .literal(.false),
-                String(str[Token.Literal.false.rawValue.endIndex...]))
-
-        } else {
-            return (nil, str)
-        }
-    }
-
-    func lexNull(_ str: String) throws -> (Token?, String) {
-
-        guard str.hasPrefix(Token.Literal.null.rawValue) else {
-            return (nil, str)
-        }
-
-        return (
-            .literal(.null),
-            String(str[Token.Literal.null.rawValue.endIndex...]))
     }
 }
 
@@ -149,9 +140,5 @@ private extension Character {
 
     var isJsonQuote: Bool {
         return self == "\""
-    }
-
-    var jsonSyntax: Token.Syntax? {
-        return Token.Syntax(rawValue: self)
     }
 }

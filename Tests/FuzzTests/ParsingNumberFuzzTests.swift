@@ -20,14 +20,15 @@ final class ParsingNumberFuzzTests: XCTestCase {
     func testRandom() {
 
         let numberStr = NumericTokenGenerator().generateRandom()
-        let expr = { try SyntaxParser().parse([.number(numberStr)]) }
+        let strRange = numberStr.startIndex..<numberStr.endIndex
+        let token = Token(kind: .number(numberStr), range: strRange)
+        let expected = SyntaxToken(kind: .numberValue, range: strRange)
+
+        let expr = { try SyntaxParser().parse([token]) }
 
         switch TrustedParser.parseNumber(numberStr) {
-        case let .double(val):
-            XCTAssert( try expr() == [.doubleValue(val)], numberStr)
-
-        case let .integer(val):
-            XCTAssert( try expr() == [.integerValue(val)], numberStr)
+        case .double, .integer:
+            XCTAssert( try expr() == [expected], numberStr)
 
         case .error:
             XCTAssertThrowsError(try expr(), numberStr)

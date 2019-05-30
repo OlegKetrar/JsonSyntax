@@ -14,11 +14,9 @@ struct SyntaxParser {
             throw Error.parser("no tokens available")
         }
 
-        guard
-            case let (.some(parsed), rest) = try parseJsonValue(tokens),
-            rest.isEmpty,
-            !parsed.isEmpty
-        else {
+        let (parsed, rest) = try parseJsonValue(tokens)
+
+        guard rest.isEmpty, !parsed.isEmpty else {
             throw Error.parser(.errorInvalidSyntax)
         }
 
@@ -30,24 +28,27 @@ struct SyntaxParser {
 
 private extension SyntaxParser {
 
-    func parseJsonValue(_ tokens: [Token]) throws -> ([SyntaxToken]?, [Token]) {
+    func parseJsonValue(_ tokens: [Token]) throws -> ([SyntaxToken], [Token]) {
 
         guard let token = tokens.first else {
             throw Error.parser(.errorInvalidSyntax)
         }
 
-        switch token {
+        switch token.kind {
         case let .number(valStr):
-            return ([ try parseNumber(valStr) ], Array(tokens.dropFirst()))
+            return (
+                [ SyntaxToken(kind: try parseNumber(valStr), range: token.range) ],
+                Array(tokens.dropFirst()))
 
-        case let .string(val):
-            return ([.stringValue(val)], Array(tokens.dropFirst()))
+        case .string:
+            return (
+                [ SyntaxToken(kind: .stringValue, range: token.range) ],
+                Array(tokens.dropFirst()))
 
-        case .literal(.true), .literal(.false):
-            return ([.boolValue], Array(tokens.dropFirst()))
-
-        case .literal(.null):
-            return ([.null], Array(tokens.dropFirst()))
+        case let .literal(val):
+            return (
+                [SyntaxToken(kind: .literalValue(val), range: token.range)],
+                Array(tokens.dropFirst()))
 
         default:
             break
@@ -66,21 +67,29 @@ private extension SyntaxParser {
 
     func parseObject(_ tokens: [Token]) throws -> ([SyntaxToken]?, [Token]) {
 
-        // tokens can't be empty, we have check on the caller side
-        guard tokens[0] == .syntax(.leftBrace) else {
-            return (nil, tokens)
-        }
+        // tokens can't be empty, we already check on the caller side
+        guard let first = tokens.first,
+            first.kind == .syntax(.openBrace) else { return (nil, tokens) }
 
-        guard let second = tokens.first else {
+        guard tokens.indices.contains(1) else {
             throw Error.parser(.errorInvalidSyntax)
         }
 
-        guard second != .syntax(.rightBrace) else { // `{}`
-            return ([.braces, .braces], Array(tokens.dropFirst(2)))
+        let second = tokens[1]
+
+        guard second.kind != .syntax(.closeBrace) else { // `{}`
+            let objTokens = [
+                SyntaxToken(kind: .syntax(.openBrace), range: first.range),
+                SyntaxToken(kind: .syntax(.closeBrace), range: second.range)
+            ]
+
+            return (objTokens, Array(tokens.dropFirst(2)))
         }
 
         var mutTokens = Array(tokens.dropFirst())
-        var syntaxTokens: [SyntaxToken] = [.braces]
+        var syntaxTokens = [
+            SyntaxToken(kind: .syntax(.openBrace), range: first.range)
+        ]
 
         while true {
             guard let keyToken = mutTokens.first else {
@@ -88,8 +97,12 @@ private extension SyntaxParser {
             }
 
             // parse string key
-            if case let .string(keyName) = keyToken {
-                syntaxTokens.append(.key(keyName))
+            if case let .string(keyName) = keyToken.kind {
+                guard !keyName.isEmpty else {
+                    throw Error.parser("object key can't be empty string")
+                }
+
+                syntaxTokens.append(SyntaxToken(kind: .key, range: keyToken.range))
                 _ = mutTokens.removeFirst()
 
             } else {
@@ -97,32 +110,42 @@ private extension SyntaxParser {
             }
 
             // parse colon
-            guard case .some(.syntax(.colon)) = mutTokens.first else {
+            guard
+                let colonToken = mutTokens.first,
+                case .syntax(.colon) = colonToken.kind
+            else {
                 throw Error.parser("expecting `:` after object key")
             }
 
-            syntaxTokens.append(.colon)
+            syntaxTokens.append(SyntaxToken(kind: .syntax(.colon), range: colonToken.range))
             _ = mutTokens.removeFirst()
 
             // parse value
-            if case let (.some(parsedValue), rest) = try parseJsonValue(mutTokens) {
-                syntaxTokens.append(contentsOf: parsedValue)
-                mutTokens = rest
-            } else {
-                throw Error.parser("expecting value after `:`")
-            }
+            let (parsedValue, rest) = try parseJsonValue(mutTokens)
+            syntaxTokens.append(contentsOf: parsedValue)
+            mutTokens = rest
 
             // parse closing brace or comma
-            switch mutTokens.first {
+            guard let nextToken = mutTokens.first else {
+                throw Error.parser("unexpected end of an object")
+            }
 
-            case .some(.syntax(.rightBrace)):
-                syntaxTokens.append(.braces)
+            switch nextToken.kind {
+
+            case .syntax(.closeBrace):
+                syntaxTokens.append(SyntaxToken(
+                    kind: .syntax(.closeBrace),
+                    range: nextToken.range))
+
                 _ = mutTokens.removeFirst()
 
                 return (syntaxTokens, mutTokens)
 
-            case .some(.syntax(.comma)):
-                syntaxTokens.append(.comma)
+            case .syntax(.comma):
+                syntaxTokens.append(SyntaxToken(
+                    kind: .syntax(.comma),
+                    range: nextToken.range))
+
                 _ = mutTokens.removeFirst()
 
             default:
@@ -134,42 +157,56 @@ private extension SyntaxParser {
     func parseArray(_ tokens: [Token]) throws -> ([SyntaxToken]?, [Token]) {
 
         // tokens can't be empty, we have check on the caller side
-        guard tokens[0] == .syntax(.leftBracket) else {
-            return (nil, tokens)
-        }
+        guard let first = tokens.first,
+            first.kind == .syntax(.openBracket) else { return (nil, tokens) }
 
-        guard let second = tokens.first else {
+        guard tokens.indices.contains(1) else {
             throw Error.parser(.errorInvalidSyntax)
         }
 
-        guard second != .syntax(.rightBracket) else { // `[]`
-            return ([.brackets, .brackets], Array(tokens.dropFirst(2)))
+        let second = tokens[1]
+
+        guard second.kind != .syntax(.closeBracket) else { // `[]`
+            let arrayTokens = [
+                SyntaxToken(kind: .syntax(.openBracket), range: first.range),
+                SyntaxToken(kind: .syntax(.closeBracket), range: second.range)
+            ]
+
+            return (arrayTokens, Array(tokens.dropFirst(2)))
         }
 
         var mutTokens = Array(tokens.dropFirst())
-        var syntaxTokens: [SyntaxToken] = [.brackets]
+        var syntaxTokens: [SyntaxToken] = [
+            SyntaxToken(kind: .syntax(.openBracket), range: first.range)
+        ]
 
         while true {
 
-            if case let (.some(parsedValue), rest) = try parseJsonValue(mutTokens) {
-                syntaxTokens.append(contentsOf: parsedValue)
-                mutTokens = rest
-            } else {
-                // array can't be empty here
-                throw Error.parser("expecting value in array")
-            }
+            let (parsedValue, rest) = try parseJsonValue(mutTokens)
+            syntaxTokens.append(contentsOf: parsedValue)
+            mutTokens = rest
 
             // parse closing bracket or comma
-            switch mutTokens.first {
+            guard let nextToken = mutTokens.first else {
+                throw Error.parser("unexpected end of an array")
+            }
 
-            case .some(.syntax(.rightBracket)):
-                syntaxTokens.append(.brackets)
+            switch nextToken.kind {
+
+            case .syntax(.closeBracket):
+                syntaxTokens.append(SyntaxToken(
+                    kind: .syntax(.closeBracket),
+                    range: nextToken.range))
+
                 _ = mutTokens.removeFirst()
 
                 return (syntaxTokens, mutTokens)
 
-            case .some(.syntax(.comma)):
-                syntaxTokens.append(.comma)
+            case .syntax(.comma):
+                syntaxTokens.append(SyntaxToken(
+                    kind: .syntax(.comma),
+                    range: nextToken.range))
+
                 _ = mutTokens.removeFirst()
 
             default:
@@ -178,25 +215,13 @@ private extension SyntaxParser {
         }
     }
 
-    func parseNumber(_ str: String) throws -> SyntaxToken {
+    func parseNumber(_ str: String) throws -> SyntaxToken.Kind {
 
         guard str.isValidJsonNumber else {
             throw Error.parser(.errorInvalidSyntax)
         }
 
-        if let val = Int(str) {
-            return .integerValue(val)
-
-        } else if let val = Double(str) {
-            if let int = Int(exactly: val), val == Double(int) {
-                return .integerValue(int)
-            } else {
-                return .doubleValue(val)
-            }
-
-        } else {
-            throw Error.parser("parsed number too big")
-        }
+        return .numberValue
     }
 }
 
@@ -206,10 +231,6 @@ private extension String {
 
     static var errorInvalidSyntax: String {
         return "invalid syntax"
-    }
-
-    var isValidExponent: Bool {
-        return false
     }
 
     var isValidJsonNumber: Bool {
@@ -231,7 +252,7 @@ private extension String {
                 if indices.contains(thirdIndex) {
                     guard self[thirdIndex].isDotOrExp else { return false }
                 } else {
-                    return false
+                    return true // `-0` is valid number
                 }
             }
 
@@ -287,9 +308,5 @@ private extension Character {
 
     var isExp: Bool {
         return self == "e" || self == "E"
-    }
-
-    var isSign: Bool {
-        return self == "-" || self == "+"
     }
 }

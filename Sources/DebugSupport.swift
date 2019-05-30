@@ -20,6 +20,13 @@ extension Error: CustomStringConvertible {
 extension Token: CustomStringConvertible {
 
     public var description: String {
+        return "kind: \(kind), range: \(range.lowerBound) - \(range.upperBound)"
+    }
+}
+
+extension Token.Kind: CustomStringConvertible {
+
+    public var description: String {
 
         switch self {
         case let .syntax(s): return "syntax(\(s))"
@@ -33,18 +40,6 @@ extension Token: CustomStringConvertible {
 extension SyntaxToken: CustomStringConvertible {
 
     public var description: String {
-
-        switch self {
-        case let .key(name): return "key(\(name))"
-        case let .stringValue(val): return "string(\"\(val)\")"
-        case let .integerValue(val): return "integer(\(val))"
-        case let .doubleValue(val): return "double(\(val))"
-        case .braces: return "braces"
-        case .brackets: return "brackets"
-        case .boolValue: return "boolValue"
-        case .null: return "null"
-        case .comma: return "comma"
-        case .colon: return "colon"
-        }
+        return "\(kind), range: \(range.lowerBound) - \(range.upperBound)"
     }
 }

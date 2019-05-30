@@ -7,13 +7,12 @@
 //
 
 import UIKit
-import JsonSyntax
 
 final class ViewController: UIViewController {
 
     private let codeView = CodeView(frame: .zero).with {
         $0.setTheme(.default)
-        $0.setCode(sampleJson)
+        $0.setSyntax(JsonSyntaxDecorator())
         $0.layer.cornerRadius = 5
         $0.layer.masksToBounds = true
     }
@@ -33,6 +32,8 @@ final class ViewController: UIViewController {
 
         view.backgroundColor = .white
         view.layoutIfNeeded()
+
+        codeView.setCode(sampleJson)
     }
 }
 

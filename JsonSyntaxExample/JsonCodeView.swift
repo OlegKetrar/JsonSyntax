@@ -50,8 +50,17 @@ final class CodeView: UIView {
     private let textView = UITextView(frame: .zero).with {
         $0.backgroundColor = .clear
         $0.isScrollEnabled = false
-        $0.isEditable = false
+        $0.isEditable = true
         $0.isSelectable = true
+        $0.dataDetectorTypes = []
+        $0.autocapitalizationType = .none
+        $0.autocorrectionType = .no
+        $0.isSecureTextEntry = false
+        $0.keyboardDismissMode = .onDrag
+        $0.allowsEditingTextAttributes = false
+        $0.smartInsertDeleteType = .no
+        $0.smartQuotesType = .no
+        $0.smartDashesType = .no
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
 
@@ -69,6 +78,8 @@ final class CodeView: UIView {
 
     func setTheme(_ theme: CodeTheme) {
         self.theme = theme
+        self.backgroundColor = theme.textBgColor
+
     }
 
     func setSyntax(_ syntax: CodeSyntaxHighlighter) {
@@ -76,11 +87,34 @@ final class CodeView: UIView {
     }
 
     func setCode(_ code: String) {
-        let codeStr = NSMutableAttributedString(string: code)
-        let decorated = syntax.decorate(code: codeStr, with: theme)
+        textView.attributedText = syntax.decorate(
+            code: NSMutableAttributedString(string: code),
+            with: theme)
+    }
+}
 
-        textView.attributedText = decorated
-        backgroundColor = theme.textBgColor
+// MARK: - UITextFieldDelegate
+
+extension CodeView: UITextViewDelegate {
+
+    func textViewDidChange(_ textView: UITextView) {
+
+        let newCode = NSMutableAttributedString(
+            attributedString: textView.attributedText)
+
+        textView.attributedText = syntax.decorate(code: newCode, with: theme)
+    }
+
+    func textView(
+        _ textView: UITextView,
+        shouldChangeTextIn range: NSRange,
+        replacementText text: String) -> Bool {
+
+        if text.contains("") {
+            // replace quotes
+        }
+
+        return true
     }
 }
 
@@ -106,6 +140,8 @@ private extension CodeView {
             textView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             textView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
         ])
+
+        textView.delegate = self
     }
 }
 

@@ -134,7 +134,7 @@ private extension Lexer {
 private extension Character {
 
     var isJsonWhitespace: Bool {
-        let whitespace: [Character] = [ " ", "\t", "\n", "\r" ]
+        let whitespace: [Character] = [" ", "\t", "\n", "\r"]
         return whitespace.contains(self)
     }
 

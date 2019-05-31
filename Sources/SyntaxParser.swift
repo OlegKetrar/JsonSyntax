@@ -37,12 +37,12 @@ private extension SyntaxParser {
         switch token.kind {
         case let .number(valStr):
             return (
-                [ SyntaxToken(kind: try parseNumber(valStr), range: token.range) ],
+                [SyntaxToken(kind: try parseNumber(valStr), range: token.range)],
                 Array(tokens.dropFirst()))
 
         case .string:
             return (
-                [ SyntaxToken(kind: .stringValue, range: token.range) ],
+                [SyntaxToken(kind: .stringValue, range: token.range)],
                 Array(tokens.dropFirst()))
 
         case let .literal(val):
@@ -117,7 +117,10 @@ private extension SyntaxParser {
                 throw Error.parser("expecting `:` after object key")
             }
 
-            syntaxTokens.append(SyntaxToken(kind: .syntax(.colon), range: colonToken.range))
+            syntaxTokens.append(SyntaxToken(
+                kind: .syntax(.colon),
+                range: colonToken.range))
+
             _ = mutTokens.removeFirst()
 
             // parse value
@@ -303,7 +306,7 @@ private extension Character {
     }
 
     var isDotOrExp: Bool {
-        return self == "." || self.isExp
+        return self == "." || isExp
     }
 
     var isExp: Bool {

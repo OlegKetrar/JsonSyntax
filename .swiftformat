@@ -1,0 +1,42 @@
+
+--allman false
+--conflictmarkers reject
+--fragment false
+--importgrouping testable-bottom
+
+--empty void
+--header ignore
+
+--ifdef outdent
+--indent 4
+--indentcase false
+--elseposition same-line
+--linebreaks lf
+
+--ranges no-space
+--trailingclosures
+--trimwhitespace always
+--operatorfunc no-space
+
+--commas inline
+--semicolons never
+--patternlet hoist
+--self init-only
+--stripunusedargs always
+
+--wraparguments before-first
+--wrapcollections before-first
+--closingparen same-line
+
+--binarygrouping none
+--decimalgrouping none
+--exponentcase lowercase
+--exponentgrouping disabled
+--fractiongrouping disabled
+--hexgrouping none
+--hexliteralcase uppercase
+--octalgrouping none
+
+--disable blankLinesAtStartOfScope,yodaConditions,strongOutlets
+
+--selfrequired

@@ -11,8 +11,6 @@ import XCTest
 
 final class ParsingNumberTests: XCTestCase {
 
-    // MARK: - Valid
-
     func testValid() {
         XCTAssert(try parse("0"))
         XCTAssert(try parse("10"))
@@ -30,8 +28,6 @@ final class ParsingNumberTests: XCTestCase {
         XCTAssert(try parse("0.244e7"))
         XCTAssert(try parse("-56.230888"))
     }
-
-    // MARK: - Invalid
 
     func testInvalid() {
         XCTAssertThrowsError(try parse("024"))

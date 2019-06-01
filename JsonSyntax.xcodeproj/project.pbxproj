@@ -24,6 +24,7 @@
 		553AA86322933D26002570E3 /* SyntaxToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553AA85A22933D26002570E3 /* SyntaxToken.swift */; };
 		558C659222A18CA1004D8924 /* JsonSyntax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553AA7FD22930377002570E3 /* JsonSyntax.framework */; };
 		558C659322A18CA1004D8924 /* JsonSyntax.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 553AA7FD22930377002570E3 /* JsonSyntax.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		558C659A22A2D7ED004D8924 /* LexerStringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558C659922A2D7ED004D8924 /* LexerStringTests.swift */; };
 		5596807D229C764400E16ED2 /* ParsingNumberTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5596807C229C764400E16ED2 /* ParsingNumberTests.swift */; };
 		55DF6C3822947B2300E122C3 /* LexerValidTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DF6C3722947B2300E122C3 /* LexerValidTests.swift */; };
 		55DF6C4F2299C4AB00E122C3 /* LexerPerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DF6C4E2299C4AB00E122C3 /* LexerPerformanceTests.swift */; };
@@ -101,6 +102,7 @@
 		553AA85A22933D26002570E3 /* SyntaxToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = SyntaxToken.swift; sourceTree = "<group>"; };
 		553AA86722933F0E002570E3 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		553AA86922933F0E002570E3 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		558C659922A2D7ED004D8924 /* LexerStringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LexerStringTests.swift; sourceTree = "<group>"; };
 		5596807C229C764400E16ED2 /* ParsingNumberTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingNumberTests.swift; sourceTree = "<group>"; };
 		55DF6C3722947B2300E122C3 /* LexerValidTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LexerValidTests.swift; sourceTree = "<group>"; };
 		55DF6C4E2299C4AB00E122C3 /* LexerPerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LexerPerformanceTests.swift; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 				55DF6C3722947B2300E122C3 /* LexerValidTests.swift */,
 				55DF6C4E2299C4AB00E122C3 /* LexerPerformanceTests.swift */,
 				5596807C229C764400E16ED2 /* ParsingNumberTests.swift */,
+				558C659922A2D7ED004D8924 /* LexerStringTests.swift */,
 				553AA80D22930377002570E3 /* Info.plist */,
 			);
 			name = JsonSyntaxTests;
@@ -489,6 +492,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5596807D229C764400E16ED2 /* ParsingNumberTests.swift in Sources */,
+				558C659A22A2D7ED004D8924 /* LexerStringTests.swift in Sources */,
 				55DF6C3822947B2300E122C3 /* LexerValidTests.swift in Sources */,
 				55DF6C4F2299C4AB00E122C3 /* LexerPerformanceTests.swift in Sources */,
 			);

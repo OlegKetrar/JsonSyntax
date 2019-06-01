@@ -45,12 +45,14 @@ struct Lexer {
 
             } else if let syntaxChar = SyntaxCharacter(rawValue: string[index]) {
 
+                let tokenEndIndex = string.index(after: index)
+
                 tokens.append(Token(
                     kind:
                     .syntax(syntaxChar),
-                    range: index..<string.index(after: index)))
+                    range: index..<tokenEndIndex))
 
-                index = string.index(after: index)
+                index = tokenEndIndex
 
             } else {
                 throw Error.lexer("unexpected character: \(string[index])")
@@ -71,35 +73,55 @@ private extension Lexer {
 
         var length: Int = 2
         var jsonStr: String = ""
-        var index: String.Index = str.index(after: location)
+        var indexOrNil = str.safeIndex(after: location)
 
         while true {
-            guard index < str.endIndex else { break }
+            guard let index = indexOrNil,
+                index < str.endIndex else { break }
 
             let char = str[index]
 
             if char.isJsonQuote {
                 return (.string(jsonStr), length)
-            } else if char == "\\" {
+            } else if char == #"\"# {
 
-                let nextIndex = str.index(after: index)
-
-                guard nextIndex < str.endIndex else {
+                guard
+                    let nextIndex = str.safeIndex(after: index),
+                    nextIndex < str.endIndex
+                else {
                     throw Error.lexer("Expected escaped character")
                 }
 
                 let nextChar = str[nextIndex]
 
-                if nextChar.isJsonEscaped {
-                    jsonStr.append("\\")
-                    jsonStr.append(nextChar)
+                if let escaped = nextChar.getEscapedCharacter() {
+                    jsonStr.append(escaped)
                     length += 2
 
-                    index = str.index(after: nextIndex)
+                    indexOrNil = str.safeIndex(after: nextIndex)
 
-                    // append
                 } else if nextChar == "u" {
-                    throw Error.lexer("Unicode characters not supported yet")
+
+                    guard
+                        let unicodeLastIndex = str.safeIndex(after: nextIndex, offsetBy: 4),
+                        unicodeLastIndex < str.endIndex
+                    else {
+                        throw Error.lexer("Unexpected end of unicode literal")
+                    }
+
+                    let unicodeCodeStr = str[str.index(after: nextIndex)...unicodeLastIndex]
+
+                    guard
+                        let hexCode = UInt32(unicodeCodeStr, radix: 16),
+                        let scalar = Unicode.Scalar(hexCode)
+                    else {
+                        throw Error.lexer("Invalid unicode sequence")
+                    }
+
+                    jsonStr.append(Character(scalar))
+                    length += 6 // \uFFFF
+
+                    indexOrNil = str.safeIndex(after: unicodeLastIndex)
 
                 } else {
                     throw Error.lexer("Unexpected escaped character \(nextChar)")
@@ -109,7 +131,7 @@ private extension Lexer {
                 jsonStr.append(char)
                 length += 1
 
-                index = str.index(after: index)
+                indexOrNil = str.safeIndex(after: index)
             }
         }
 
@@ -167,8 +189,38 @@ private extension Character {
         return self == "\""
     }
 
-    var isJsonEscaped: Bool {
-        let chars: [Character] = ["\"", "\\", "/", "b", "f", "n", "r", "t"]
-        return chars.contains(self)
+    func getEscapedCharacter() -> Character? {
+
+        switch self {
+        case "\"": return "\""
+        case "\\": return "\\"
+        case "n": return "\n"
+        case "r": return "\r"
+        case "t": return "\t"
+        case "/": return "/"
+
+        case "b": return Character(Unicode.Scalar(0x0008 as UInt8))
+        case "f": return Character(Unicode.Scalar(0x000C as UInt8))
+        default:
+            return nil
+        }
+    }
+}
+
+private extension String {
+
+    func safeIndex(
+        after index: String.Index,
+        offsetBy offset: UInt = 1) -> String.Index? {
+
+        var mutIndex = index
+
+        for _ in 0..<offset {
+            guard mutIndex < endIndex else { return nil }
+
+            formIndex(after: &mutIndex)
+        }
+
+        return mutIndex
     }
 }

@@ -32,14 +32,14 @@ final class LexerValidTests: XCTestCase {
             .syntax(.openBrace),
             .string("name"),
             .syntax(.colon),
-            .string(#"escaped \" quote"#),
+            .string("escaped \" quote"),
             .syntax(.closeBrace)
         ])
     }
 
     func testStringEscaping() {
         XCTAssert(try lex(#""abc\nde\tb \r \\aaa \/ a""#) == [
-            .string(#"abc\nde\tb \r \\aaa \/ a"#)
+            .string("abc\nde\tb \r \\aaa / a")
         ])
     }
 

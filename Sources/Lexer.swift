@@ -74,12 +74,37 @@ private extension Lexer {
         var index: String.Index = str.index(after: location)
 
         while true {
-            guard index <= str.endIndex else { break }
+            guard index < str.endIndex else { break }
 
             let char = str[index]
 
             if char.isJsonQuote {
                 return (.string(jsonStr), length)
+            } else if char == "\\" {
+
+                let nextIndex = str.index(after: index)
+
+                guard nextIndex < str.endIndex else {
+                    throw Error.lexer("Expected escaped character")
+                }
+
+                let nextChar = str[nextIndex]
+
+                if nextChar.isJsonEscaped {
+                    jsonStr.append("\\")
+                    jsonStr.append(nextChar)
+                    length += 2
+
+                    index = str.index(after: nextIndex)
+
+                    // append
+                } else if nextChar == "u" {
+                    throw Error.lexer("Unicode characters not supported yet")
+
+                } else {
+                    throw Error.lexer("Unexpected escaped character \(nextChar)")
+                }
+
             } else {
                 jsonStr.append(char)
                 length += 1
@@ -140,5 +165,10 @@ private extension Character {
 
     var isJsonQuote: Bool {
         return self == "\""
+    }
+
+    var isJsonEscaped: Bool {
+        let chars: [Character] = ["\"", "\\", "/", "b", "f", "n", "r", "t"]
+        return chars.contains(self)
     }
 }

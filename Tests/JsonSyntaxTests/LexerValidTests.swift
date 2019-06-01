@@ -12,17 +12,41 @@ import XCTest
 final class LexerValidTests: XCTestCase {
 
     func testEmptyObject() {
-        XCTAssert( try lex("{}") == [
+        XCTAssert(try lex("{}") == [
             .syntax(.openBrace),
             .syntax(.closeBrace)
         ])
     }
 
     func testEmptyArray() {
-        XCTAssert( try lex("[]") == [
+        XCTAssert(try lex("[]") == [
             .syntax(.openBracket),
             .syntax(.closeBracket)
         ])
+    }
+
+    func testStringQuoteEscaping() {
+        let str = #"{ "name": "escaped \" quote" }"#
+
+        XCTAssert(try lex(str) == [
+            .syntax(.openBrace),
+            .string("name"),
+            .syntax(.colon),
+            .string(#"escaped \" quote"#),
+            .syntax(.closeBrace)
+        ])
+    }
+
+    func testStringEscaping() {
+        XCTAssert(try lex(#""abc\nde\tb \r \\aaa \/ a""#) == [
+            .string(#"abc\nde\tb \r \\aaa \/ a"#)
+        ])
+    }
+
+    func testInvalidStringUnbalancedQuotes() {
+        XCTAssertThrowsError(try lex(#"{ "name": " }"#))
+        XCTAssertThrowsError(try lex(#"{ "a": ""#))
+        XCTAssertThrowsError(try lex(#""name"#))
     }
 
     // MARK: - Object
@@ -30,7 +54,7 @@ final class LexerValidTests: XCTestCase {
     func testObject1WithStringValue() {
         let str = #"{ "name" : "Ivan" }"#
 
-        XCTAssert( try lex(str) == [
+        XCTAssert(try lex(str) == [
             .syntax(.openBrace),
             .string("name"),
             .syntax(.colon),
@@ -42,7 +66,7 @@ final class LexerValidTests: XCTestCase {
     func testObject2WithStringValue() {
         let str = #"{ "name" : "Ivan", "surname" :"Petrovich"}"#
 
-        XCTAssert( try lex(str) == [
+        XCTAssert(try lex(str) == [
             .syntax(.openBrace),
             .string("name"),
             .syntax(.colon),
@@ -58,7 +82,7 @@ final class LexerValidTests: XCTestCase {
     func testObjectWithEmptyStringValue() {
         let str = #"{ "name" : "" }"#
 
-        XCTAssert( try lex(str) == [
+        XCTAssert(try lex(str) == [
             .syntax(.openBrace),
             .string("name"),
             .syntax(.colon),
@@ -70,7 +94,7 @@ final class LexerValidTests: XCTestCase {
     func testSimpleObjectWithIntValue() {
         let str = #"{ "age": 10 }"#
 
-        XCTAssert( try lex(str) == [
+        XCTAssert(try lex(str) == [
             .syntax(.openBrace),
             .string("age"),
             .syntax(.colon),
@@ -82,7 +106,7 @@ final class LexerValidTests: XCTestCase {
     func testSimpleObject() {
         let str = #"{ "name" : "Ivan", "age": 10, "male": true }"#
 
-        XCTAssert( try lex(str) == [
+        XCTAssert(try lex(str) == [
             .syntax(.openBrace),
             .string("name"),
             .syntax(.colon),
@@ -104,7 +128,7 @@ final class LexerValidTests: XCTestCase {
     func testStringArray() {
         let str = #"[ "a", "ab", "abc", "abcd" ]"#
 
-        XCTAssert( try lex(str) == [
+        XCTAssert(try lex(str) == [
             .syntax(.openBracket),
             .string("a"),
             .syntax(.comma),
@@ -120,7 +144,7 @@ final class LexerValidTests: XCTestCase {
     func testIntArray() {
         let str = #"[ 7, 89, -56, 2e+3, 400e-1, 0 ]"#
 
-        XCTAssert( try lex(str) == [
+        XCTAssert(try lex(str) == [
             .syntax(.openBracket),
             .number("7"),
             .syntax(.comma),
@@ -140,7 +164,7 @@ final class LexerValidTests: XCTestCase {
     func testFloatArray() {
         let str = #"[ 7.3, 89.145, -56.230888, 2.56108884324e+3, 40.003444e-1, 0.00, 0 ]"#
 
-        XCTAssert( try lex(str) == [
+        XCTAssert(try lex(str) == [
             .syntax(.openBracket),
             .number("7.3"),
             .syntax(.comma),

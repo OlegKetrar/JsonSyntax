@@ -219,11 +219,7 @@ private extension SyntaxParser {
     }
 
     func parseNumber(_ str: String) throws -> SyntaxToken.Kind {
-
-        guard str.isValidJsonNumber else {
-            throw Error.parser(.errorInvalidSyntax)
-        }
-
+        try str.validateNumber()
         return .numberValue
     }
 }
@@ -236,13 +232,21 @@ private extension String {
         return "invalid syntax"
     }
 
-    var isValidJsonNumber: Bool {
-        guard let firstChar = first,
-            firstChar == "-" || firstChar.isJsonNumber else { return false }
+    func validateNumber() throws {
+        guard let firstChar = first else {
+            throw Error.parser("Number token can't be empty string")
+        }
+
+        guard firstChar == "-" || firstChar.isJsonNumber else {
+            throw Error.parser("Number token should start with `-` or digit")
+        }
 
         guard count > 1 else {
-            // only digits are valid chars for 1-length number token
-            return firstChar.isJsonNumber
+            guard firstChar.isJsonNumber else {
+                throw Error.parser("Only digits are valid chars for 1-length number")
+            }
+
+            return
         }
 
         let secondChar = self[index(after: startIndex)]
@@ -253,15 +257,20 @@ private extension String {
                 let thirdIndex = index(startIndex, offsetBy: 2)
 
                 if indices.contains(thirdIndex) {
-                    guard self[thirdIndex].isDotOrExp else { return false }
+                    guard self[thirdIndex].isDotOrExp else {
+                        throw Error.parser("Leading zeros are not allowed")
+                    }
+
                 } else {
-                    return true // `-0` is valid number
+                    return // `-0` is valid number
                 }
             }
 
         } else {
             if firstChar == "0" {
-                guard secondChar.isDotOrExp else { return false }
+                guard secondChar.isDotOrExp else {
+                    throw Error.parser("Leading zeros are not allowed")
+                }
             }
         }
 
@@ -287,14 +296,15 @@ private extension String {
                 hasDot = true
 
             default:
-                return false
+                throw Error.parser("invalid number")
             }
 
             previousChar = char
         }
 
-        guard last!.isJsonNumber else { return false }
-        return true
+        guard last?.isJsonNumber == true else {
+            throw Error.parser("Unexpected end of number token")
+        }
     }
 }
 

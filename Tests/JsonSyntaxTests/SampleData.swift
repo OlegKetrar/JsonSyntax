@@ -1,38 +1,28 @@
 //
-//  LexerPerformanceTests.swift
+//  SampleData.swift
 //  JsonSyntaxTests
 //
-//  Created by Oleg Ketrar on 25/05/2019.
+//  Created by Oleg Ketrar on 02/06/2019.
 //  Copyright © 2019 Oleg Ketrar. All rights reserved.
 //
 
-import XCTest
-@testable import JsonSyntax
+import Foundation
 
-final class LexerPerformanceTests: XCTestCase {
+struct SampleData {
+    private let jsonArrayStr: String
 
-    func testPerformance() {
-        let str = sampleJsonStr
-        print("-- \(str.count)")
+    init(count: Int) {
+        let str = (0..<count)
+            .map { _ in sampleJsonItem }
+            .joined(separator: ",")
 
-        self.measure {
-            do {
-                _ = try Lexer().lex(str)
-            } catch {
-                XCTFail(error.localizedDescription)
-            }
-        }
+        self.jsonArrayStr = "[ \(str) ]"
+    }
+
+    func getRawStr() -> String {
+        return jsonArrayStr
     }
 }
-
-private let sampleJsonStr: String = {
-
-    let str = (0..<35)
-        .map { _ in sampleJsonItem }
-        .joined(separator: ",")
-
-    return "[ \(str) ]"
-}()
 
 private let sampleJsonItem = #"""
 {"web-app": {

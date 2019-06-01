@@ -25,9 +25,12 @@
 		558C659222A18CA1004D8924 /* JsonSyntax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553AA7FD22930377002570E3 /* JsonSyntax.framework */; };
 		558C659322A18CA1004D8924 /* JsonSyntax.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 553AA7FD22930377002570E3 /* JsonSyntax.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		558C659A22A2D7ED004D8924 /* LexerStringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558C659922A2D7ED004D8924 /* LexerStringTests.swift */; };
+		558C659E22A3057F004D8924 /* TrustedParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558C659D22A3057F004D8924 /* TrustedParser.swift */; };
+		558C65A222A31BDD004D8924 /* ParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558C65A122A31BDD004D8924 /* ParserTests.swift */; };
+		558C65A422A32B06004D8924 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558C65A322A32B06004D8924 /* SampleData.swift */; };
 		5596807D229C764400E16ED2 /* ParsingNumberTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5596807C229C764400E16ED2 /* ParsingNumberTests.swift */; };
 		55DF6C3822947B2300E122C3 /* LexerValidTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DF6C3722947B2300E122C3 /* LexerValidTests.swift */; };
-		55DF6C4F2299C4AB00E122C3 /* LexerPerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DF6C4E2299C4AB00E122C3 /* LexerPerformanceTests.swift */; };
+		55DF6C4F2299C4AB00E122C3 /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DF6C4E2299C4AB00E122C3 /* PerformanceTests.swift */; };
 		55E0D4C7229DEB31007286ED /* JsonSyntax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553AA85322933D26002570E3 /* JsonSyntax.swift */; };
 		55E0D4C8229DEB34007286ED /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553AA84F22933CDB002570E3 /* Error.swift */; };
 		55E0D4C9229DEB38007286ED /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553AA85822933D26002570E3 /* Token.swift */; };
@@ -103,9 +106,12 @@
 		553AA86722933F0E002570E3 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		553AA86922933F0E002570E3 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		558C659922A2D7ED004D8924 /* LexerStringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LexerStringTests.swift; sourceTree = "<group>"; };
+		558C659D22A3057F004D8924 /* TrustedParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrustedParser.swift; sourceTree = "<group>"; };
+		558C65A122A31BDD004D8924 /* ParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserTests.swift; sourceTree = "<group>"; };
+		558C65A322A32B06004D8924 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
 		5596807C229C764400E16ED2 /* ParsingNumberTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingNumberTests.swift; sourceTree = "<group>"; };
 		55DF6C3722947B2300E122C3 /* LexerValidTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LexerValidTests.swift; sourceTree = "<group>"; };
-		55DF6C4E2299C4AB00E122C3 /* LexerPerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LexerPerformanceTests.swift; sourceTree = "<group>"; };
+		55DF6C4E2299C4AB00E122C3 /* PerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceTests.swift; sourceTree = "<group>"; };
 		55E0D4BD229DEA04007286ED /* JsonSyntax.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JsonSyntax.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		55E0D4C0229DEA04007286ED /* Info-macOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-macOS.plist"; sourceTree = "<group>"; };
 		55E0D4D3229DEF45007286ED /* FuzzTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FuzzTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -185,9 +191,11 @@
 			isa = PBXGroup;
 			children = (
 				55DF6C3722947B2300E122C3 /* LexerValidTests.swift */,
-				55DF6C4E2299C4AB00E122C3 /* LexerPerformanceTests.swift */,
+				558C65A122A31BDD004D8924 /* ParserTests.swift */,
 				5596807C229C764400E16ED2 /* ParsingNumberTests.swift */,
 				558C659922A2D7ED004D8924 /* LexerStringTests.swift */,
+				55DF6C4E2299C4AB00E122C3 /* PerformanceTests.swift */,
+				558C65A322A32B06004D8924 /* SampleData.swift */,
 				553AA80D22930377002570E3 /* Info.plist */,
 			);
 			name = JsonSyntaxTests;
@@ -263,6 +271,7 @@
 			children = (
 				55E0D4D7229DEF45007286ED /* Info.plist */,
 				55E0D4DE229DEF9F007286ED /* ParsingNumberFuzzTests.swift */,
+				558C659D22A3057F004D8924 /* TrustedParser.swift */,
 			);
 			name = FuzzTests;
 			path = Tests/FuzzTests;
@@ -492,9 +501,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				5596807D229C764400E16ED2 /* ParsingNumberTests.swift in Sources */,
+				558C65A422A32B06004D8924 /* SampleData.swift in Sources */,
 				558C659A22A2D7ED004D8924 /* LexerStringTests.swift in Sources */,
+				558C65A222A31BDD004D8924 /* ParserTests.swift in Sources */,
 				55DF6C3822947B2300E122C3 /* LexerValidTests.swift in Sources */,
-				55DF6C4F2299C4AB00E122C3 /* LexerPerformanceTests.swift in Sources */,
+				55DF6C4F2299C4AB00E122C3 /* PerformanceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -528,6 +539,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				558C659E22A3057F004D8924 /* TrustedParser.swift in Sources */,
 				55E0D4DF229DEF9F007286ED /* ParsingNumberFuzzTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

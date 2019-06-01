@@ -36,31 +36,6 @@ final class ParsingNumberFuzzTests: XCTestCase {
     }
 }
 
-private struct TrustedParser {
-
-    enum NumberResult {
-        case double(Double)
-        case integer(Int)
-        case error
-    }
-
-    static func parseNumber(_ str: String) -> NumberResult {
-        guard let data = "[\(str)]".data(using: .utf8) else { return .error }
-
-        func parse<T: Decodable>() -> T? {
-            return try? JSONDecoder().decode([T].self, from: data).first
-        }
-
-        if let val: Int = parse() {
-            return .integer(val)
-        } else if let val: Double = parse() {
-            return .double(val)
-        } else {
-            return .error
-        }
-    }
-}
-
 private struct NumericTokenGenerator {
     private let chars = "0123456789-+eE.".map { $0 }
 

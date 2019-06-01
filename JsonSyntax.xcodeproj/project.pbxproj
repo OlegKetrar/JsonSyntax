@@ -22,7 +22,8 @@
 		553AA86022933D26002570E3 /* DebugSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553AA85722933D26002570E3 /* DebugSupport.swift */; };
 		553AA86122933D26002570E3 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553AA85822933D26002570E3 /* Token.swift */; };
 		553AA86322933D26002570E3 /* SyntaxToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553AA85A22933D26002570E3 /* SyntaxToken.swift */; };
-		553AA86D22933FC0002570E3 /* JsonSyntax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553AA7FD22930377002570E3 /* JsonSyntax.framework */; };
+		558C659222A18CA1004D8924 /* JsonSyntax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553AA7FD22930377002570E3 /* JsonSyntax.framework */; };
+		558C659322A18CA1004D8924 /* JsonSyntax.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 553AA7FD22930377002570E3 /* JsonSyntax.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5596807D229C764400E16ED2 /* ParsingNumberTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5596807C229C764400E16ED2 /* ParsingNumberTests.swift */; };
 		55DF6C3822947B2300E122C3 /* LexerValidTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DF6C3722947B2300E122C3 /* LexerValidTests.swift */; };
 		55DF6C4F2299C4AB00E122C3 /* LexerPerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DF6C4E2299C4AB00E122C3 /* LexerPerformanceTests.swift */; };
@@ -62,6 +63,20 @@
 			remoteInfo = "JsonSyntax macOS";
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		558C659422A18CA1004D8924 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				558C659322A18CA1004D8924 /* JsonSyntax.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		553AA7FD22930377002570E3 /* JsonSyntax.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JsonSyntax.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -117,7 +132,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				553AA86D22933FC0002570E3 /* JsonSyntax.framework in Frameworks */,
+				558C659222A18CA1004D8924 /* JsonSyntax.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,6 +330,7 @@
 				553AA828229308A5002570E3 /* Sources */,
 				553AA829229308A5002570E3 /* Frameworks */,
 				553AA82A229308A5002570E3 /* Resources */,
+				558C659422A18CA1004D8924 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -671,7 +687,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = K3JVG969PH;
@@ -699,7 +715,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = K3JVG969PH;
@@ -762,7 +778,9 @@
 		553AA83C229308A6002570E3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = K3JVG969PH;
 				INFOPLIST_FILE = JsonSyntaxExample/Info.plist;
@@ -773,6 +791,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.oleg-ketrar.JsonSyntaxExample";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -781,7 +800,9 @@
 		553AA83D229308A6002570E3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = K3JVG969PH;
 				INFOPLIST_FILE = JsonSyntaxExample/Info.plist;
@@ -792,6 +813,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.oleg-ketrar.JsonSyntaxExample";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

@@ -45,19 +45,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		553AA80822930377002570E3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 553AA7F422930377002570E3 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 553AA7FC22930377002570E3;
-			remoteInfo = JsonSyntax;
-		};
 		553AA86A22933FB0002570E3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 553AA7F422930377002570E3 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 553AA7FC22930377002570E3;
 			remoteInfo = JsonSyntax;
+		};
+		558541F122A8418E00F32688 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 553AA7F422930377002570E3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 55E0D4BC229DEA04007286ED;
+			remoteInfo = "JsonSyntax macOS";
 		};
 		55E0D4D9229DEF45007286ED /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -110,6 +110,7 @@
 		558C65A122A31BDD004D8924 /* ParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserTests.swift; sourceTree = "<group>"; };
 		558C65A322A32B06004D8924 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
 		5596807C229C764400E16ED2 /* ParsingNumberTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingNumberTests.swift; sourceTree = "<group>"; };
+		55A7AA5022A83B5300D408E7 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		55DF6C3722947B2300E122C3 /* LexerValidTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LexerValidTests.swift; sourceTree = "<group>"; };
 		55DF6C4E2299C4AB00E122C3 /* PerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceTests.swift; sourceTree = "<group>"; };
 		55E0D4BD229DEA04007286ED /* JsonSyntax.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JsonSyntax.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -255,6 +256,7 @@
 			children = (
 				553AA86922933F0E002570E3 /* README.md */,
 				553AA86722933F0E002570E3 /* LICENSE */,
+				55A7AA5022A83B5300D408E7 /* Package.swift */,
 			);
 			name = Metadata;
 			sourceTree = "<group>";
@@ -328,7 +330,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				553AA80922930377002570E3 /* PBXTargetDependency */,
+				558541F222A8418E00F32688 /* PBXTargetDependency */,
 			);
 			name = JsonSyntaxTests;
 			productName = JsonSyntaxTests;
@@ -547,15 +549,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		553AA80922930377002570E3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 553AA7FC22930377002570E3 /* JsonSyntax iOS */;
-			targetProxy = 553AA80822930377002570E3 /* PBXContainerItemProxy */;
-		};
 		553AA86B22933FB0002570E3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 553AA7FC22930377002570E3 /* JsonSyntax iOS */;
 			targetProxy = 553AA86A22933FB0002570E3 /* PBXContainerItemProxy */;
+		};
+		558541F222A8418E00F32688 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 55E0D4BC229DEA04007286ED /* JsonSyntax macOS */;
+			targetProxy = 558541F122A8418E00F32688 /* PBXContainerItemProxy */;
 		};
 		55E0D4DA229DEF45007286ED /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -629,6 +631,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -687,6 +690,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -757,6 +761,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = K3JVG969PH;
 				INFOPLIST_FILE = Tests/JsonSyntaxTests/Info.plist;
@@ -767,6 +772,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.oleg-ketrar.JsonSyntaxTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -776,6 +782,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = K3JVG969PH;
 				INFOPLIST_FILE = Tests/JsonSyntaxTests/Info.plist;
@@ -786,6 +793,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.oleg-ketrar.JsonSyntaxTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -895,7 +903,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = K3JVG969PH;
@@ -918,7 +926,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = K3JVG969PH;

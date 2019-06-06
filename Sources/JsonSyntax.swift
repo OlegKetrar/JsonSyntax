@@ -10,8 +10,8 @@
 public struct JsonSyntax {
     public init() {}
 
-    public func parse(_ str: String) throws -> [SyntaxToken] {
+    public func parse(_ str: String) throws -> [HighlightToken] {
         let tokens = try Lexer().lex(str)
-        return try SyntaxParser().parse(tokens)
+        return try Parser().parse(tokens)
     }
 }

@@ -66,9 +66,9 @@ struct Lexer {
 // MARK: - Private
 
 private extension Lexer {
-    typealias PartialToken = (type: Token.Kind, length: Int)
+    typealias LexingResult = (type: Token.Kind, length: Int)
 
-    func lexString(_ str: String, location: String.Index) throws -> PartialToken? {
+    func lexString(_ str: String, location: String.Index) throws -> LexingResult? {
         guard str[location].isJsonQuote else { return nil }
 
         var length: Int = 2
@@ -119,7 +119,7 @@ private extension Lexer {
                     }
 
                     jsonStr.append(Character(scalar))
-                    length += 6 // \uFFFF
+                    length += 6 // \uXXXX
 
                     indexOrNil = str.safeIndex(after: unicodeLastIndex)
 
@@ -138,7 +138,7 @@ private extension Lexer {
         throw Error.lexer("Expected end-of-string quote")
     }
 
-    func lexLiteral(_ str: String, location: String.Index) throws -> PartialToken? {
+    func lexLiteral(_ str: String, location: String.Index) throws -> LexingResult? {
         let subStr = str[location...]
 
         switch true {
@@ -154,7 +154,7 @@ private extension Lexer {
         }
     }
 
-    func lexNumber(_ str: String, location: String.Index) throws -> PartialToken? {
+    func lexNumber(_ str: String, location: String.Index) throws -> LexingResult? {
         let digitChars = (0...9).map { Character("\($0)") }
         let allowedChars = digitChars + [".", "e", "E", "-", "+"]
 

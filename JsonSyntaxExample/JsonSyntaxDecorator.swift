@@ -22,7 +22,7 @@ struct JsonSyntaxDecorator: CodeSyntaxHighlighter {
         with theme: CodeTheme) -> NSAttributedString {
 
         let jsonStr = code.string
-        let tokens: [SyntaxToken]
+        let tokens: [HighlightToken]
 
         do {
             tokens = try JsonSyntax().parse(jsonStr)

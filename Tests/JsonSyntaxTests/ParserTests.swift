@@ -121,6 +121,6 @@ final class ParserTests: XCTestCase {
     }
 }
 
-private func parse(_ str: String) throws -> [SyntaxToken.Kind] {
+private func parse(_ str: String) throws -> [HighlightToken.Kind] {
     return try JsonSyntax().parse(str).map { $0.kind }
 }

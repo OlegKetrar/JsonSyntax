@@ -33,7 +33,7 @@ final class PerformanceTests: XCTestCase {
 
         measure {
             do {
-                _ = try SyntaxParser().parse(tokens)
+                _ = try Parser().parse(tokens)
             } catch {
                 XCTFail(error.description)
             }

@@ -50,8 +50,8 @@ private extension ParsingNumberTests {
 
         let strRange = str.startIndex..<str.endIndex
         let token = Token(kind: .number(str), range: strRange)
-        let expected = SyntaxToken(kind: .numberValue, range: strRange)
+        let expected = HighlightToken(kind: .numberValue, range: strRange)
 
-        return try SyntaxParser().parse([token]).first == expected
+        return try Parser().parse([token]).first == expected
     }
 }

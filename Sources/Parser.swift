@@ -1,14 +1,14 @@
 //
-//  SyntaxParser.swift
+//  Parser.swift
 //  JsonSyntax
 //
 //  Created by Oleg Ketrar on 17/05/2019.
 //  Copyright © 2019 Oleg Ketrar. All rights reserved.
 //
 
-struct SyntaxParser {
+struct Parser {
 
-    func parse(_ tokens: [Token]) throws -> [SyntaxToken] {
+    func parse(_ tokens: [Token]) throws -> [HighlightToken] {
 
         guard !tokens.isEmpty else {
             throw Error.parser("no tokens available")
@@ -26,12 +26,12 @@ struct SyntaxParser {
 
 // MARK: - Private
 
-private extension SyntaxParser {
+private extension Parser {
 
     /// [SyntaxToken] can't be empty array.
-    typealias PartialToken = ([SyntaxToken], Int)
+    typealias ParsingResult = ([HighlightToken], Int)
 
-    func parseJsonValue(_ tokens: ArraySlice<Token>) throws -> PartialToken {
+    func parseJsonValue(_ tokens: ArraySlice<Token>) throws -> ParsingResult {
 
         guard let token = tokens.first else {
             throw Error.parser(.errorInvalidSyntax)
@@ -40,17 +40,17 @@ private extension SyntaxParser {
         switch token.kind {
         case let .number(valStr):
             return (
-                [SyntaxToken(kind: try parseNumber(valStr), range: token.range)],
+                [HighlightToken(kind: try parseNumber(valStr), range: token.range)],
                 1)
 
         case .string:
             return (
-                [SyntaxToken(kind: .stringValue, range: token.range)],
+                [HighlightToken(kind: .stringValue, range: token.range)],
                 1)
 
         case let .literal(val):
             return (
-                [SyntaxToken(kind: .literalValue(val), range: token.range)],
+                [HighlightToken(kind: .literalValue(val), range: token.range)],
                 1)
 
         case .syntax(.openBrace):
@@ -65,7 +65,7 @@ private extension SyntaxParser {
     }
 
     /// First token MUST be `.syntax(.openBrace)`.
-    func parseObject(_ tokens: ArraySlice<Token>) throws -> PartialToken {
+    func parseObject(_ tokens: ArraySlice<Token>) throws -> ParsingResult {
 
         // tokens can't be empty, we already check on the caller side
         let first = tokens.first!
@@ -76,8 +76,8 @@ private extension SyntaxParser {
 
         guard second.kind != .syntax(.closeBrace) else { // `{}`
             let objTokens = [
-                SyntaxToken(kind: .syntax(.openBrace), range: first.range),
-                SyntaxToken(kind: .syntax(.closeBrace), range: second.range)
+                HighlightToken(kind: .syntax(.openBrace), range: first.range),
+                HighlightToken(kind: .syntax(.closeBrace), range: second.range)
             ]
 
             return (objTokens, 2)
@@ -85,7 +85,7 @@ private extension SyntaxParser {
 
         var mutTokens = tokens.dropFirst()
         var syntaxTokens = [
-            SyntaxToken(kind: .syntax(.openBrace), range: first.range)
+            HighlightToken(kind: .syntax(.openBrace), range: first.range)
         ]
 
         while true {
@@ -99,7 +99,7 @@ private extension SyntaxParser {
                     throw Error.parser("object key can't be empty string")
                 }
 
-                syntaxTokens.append(SyntaxToken(kind: .key, range: keyToken.range))
+                syntaxTokens.append(HighlightToken(kind: .key, range: keyToken.range))
                 mutTokens = mutTokens.dropFirst()
 
             } else {
@@ -114,7 +114,7 @@ private extension SyntaxParser {
                 throw Error.parser("expecting `:` after object key")
             }
 
-            syntaxTokens.append(SyntaxToken(
+            syntaxTokens.append(HighlightToken(
                 kind: .syntax(.colon),
                 range: colonToken.range))
 
@@ -133,7 +133,7 @@ private extension SyntaxParser {
             switch nextToken.kind {
 
             case .syntax(.closeBrace):
-                syntaxTokens.append(SyntaxToken(
+                syntaxTokens.append(HighlightToken(
                     kind: .syntax(.closeBrace),
                     range: nextToken.range))
 
@@ -142,7 +142,7 @@ private extension SyntaxParser {
                 return (syntaxTokens, syntaxTokens.count)
 
             case .syntax(.comma):
-                syntaxTokens.append(SyntaxToken(
+                syntaxTokens.append(HighlightToken(
                     kind: .syntax(.comma),
                     range: nextToken.range))
 
@@ -155,7 +155,7 @@ private extension SyntaxParser {
     }
 
     /// First token MUST be `.syntax(.openBracket)`.
-    func parseArray(_ tokens: ArraySlice<Token>) throws -> PartialToken {
+    func parseArray(_ tokens: ArraySlice<Token>) throws -> ParsingResult {
 
         // tokens can't be empty, we have check on the caller side
         let first = tokens.first!
@@ -166,16 +166,16 @@ private extension SyntaxParser {
 
         guard second.kind != .syntax(.closeBracket) else { // `[]`
             let arrayTokens = [
-                SyntaxToken(kind: .syntax(.openBracket), range: first.range),
-                SyntaxToken(kind: .syntax(.closeBracket), range: second.range)
+                HighlightToken(kind: .syntax(.openBracket), range: first.range),
+                HighlightToken(kind: .syntax(.closeBracket), range: second.range)
             ]
 
             return (arrayTokens, 2)
         }
 
         var mutTokens = tokens.dropFirst()
-        var syntaxTokens: [SyntaxToken] = [
-            SyntaxToken(kind: .syntax(.openBracket), range: first.range)
+        var syntaxTokens: [HighlightToken] = [
+            HighlightToken(kind: .syntax(.openBracket), range: first.range)
         ]
 
         while true {
@@ -192,7 +192,7 @@ private extension SyntaxParser {
             switch nextToken.kind {
 
             case .syntax(.closeBracket):
-                syntaxTokens.append(SyntaxToken(
+                syntaxTokens.append(HighlightToken(
                     kind: .syntax(.closeBracket),
                     range: nextToken.range))
 
@@ -201,7 +201,7 @@ private extension SyntaxParser {
                 return (syntaxTokens, syntaxTokens.count)
 
             case .syntax(.comma):
-                syntaxTokens.append(SyntaxToken(
+                syntaxTokens.append(HighlightToken(
                     kind: .syntax(.comma),
                     range: nextToken.range))
 
@@ -213,7 +213,7 @@ private extension SyntaxParser {
         }
     }
 
-    func parseNumber(_ str: String) throws -> SyntaxToken.Kind {
+    func parseNumber(_ str: String) throws -> HighlightToken.Kind {
         try str.validateNumber()
         return .numberValue
     }

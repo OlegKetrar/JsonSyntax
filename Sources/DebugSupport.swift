@@ -17,16 +17,27 @@ extension Error: CustomStringConvertible {
     }
 }
 
-extension Token: CustomStringConvertible {
+// MARK: -
+
+extension HighlightToken: CustomStringConvertible {
 
     public var description: String {
+        return "\(kind), range: \(range.lowerBound) - \(range.upperBound)"
+    }
+}
+
+// MARK: -
+
+extension Token: CustomStringConvertible {
+
+    var description: String {
         return "kind: \(kind), range: \(range.lowerBound) - \(range.upperBound)"
     }
 }
 
 extension Token.Kind: CustomStringConvertible {
 
-    public var description: String {
+    var description: String {
 
         switch self {
         case let .syntax(s): return "syntax(\(s))"
@@ -34,12 +45,5 @@ extension Token.Kind: CustomStringConvertible {
         case let .number(d): return "number(\(d))"
         case let .literal(l): return "literal\(l)"
         }
-    }
-}
-
-extension SyntaxToken: CustomStringConvertible {
-
-    public var description: String {
-        return "\(kind), range: \(range.lowerBound) - \(range.upperBound)"
     }
 }

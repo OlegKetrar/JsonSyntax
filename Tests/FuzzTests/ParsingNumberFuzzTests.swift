@@ -24,7 +24,7 @@ final class ParsingNumberFuzzTests: XCTestCase {
         let token = Token(kind: .number(numberStr), range: strRange)
         let expected = SyntaxToken(kind: .numberValue, range: strRange)
 
-        let expr = { try SyntaxParser().parse([token]) }
+        let expr = { try Parser().parse([token]) }
 
         switch TrustedParser.parseNumber(numberStr) {
         case .double, .integer:

@@ -8,7 +8,7 @@
 
 struct Parser {
 
-    func parse(_ tokens: [Token]) throws -> [HighlightToken] {
+    func parse(_ tokens: [Token]) throws -> ParseTree {
 
         guard !tokens.isEmpty else {
             throw Error.parser("no tokens available")
@@ -16,7 +16,7 @@ struct Parser {
 
         let (parsed, parsedTokensCount) = try parseJsonValue(tokens[...])
 
-        guard !parsed.isEmpty, parsedTokensCount == tokens.count else {
+        guard parsedTokensCount == tokens.count else {
             throw Error.parser(.errorInvalidSyntax)
         }
 
@@ -28,10 +28,7 @@ struct Parser {
 
 private extension Parser {
 
-    /// [SyntaxToken] can't be empty array.
-    typealias ParsingResult = ([HighlightToken], Int)
-
-    func parseJsonValue(_ tokens: ArraySlice<Token>) throws -> ParsingResult {
+    func parseJsonValue(_ tokens: ArraySlice<Token>) throws -> (ParseTree, Int) {
 
         guard let token = tokens.first else {
             throw Error.parser(.errorInvalidSyntax)
@@ -39,25 +36,22 @@ private extension Parser {
 
         switch token.kind {
         case let .number(valStr):
-            return (
-                [HighlightToken(kind: try parseNumber(valStr), range: token.range)],
-                1)
+            try parseNumber(valStr)
+            return (.numberNode(token.range), 1)
 
         case .string:
-            return (
-                [HighlightToken(kind: .stringValue, range: token.range)],
-                1)
+            return (.stringNode(token.range), 1)
 
         case let .literal(val):
-            return (
-                [HighlightToken(kind: .literalValue(val), range: token.range)],
-                1)
+            return (.literalNode(token.range, val), 1)
 
         case .syntax(.openBrace):
-            return try parseObject(tokens)
+            let (objectNode, count) = try parseObject(tokens)
+            return (.object(objectNode), count)
 
         case .syntax(.openBracket):
-            return try parseArray(tokens)
+            let (arrayNode, count) = try parseArray(tokens)
+            return (.array(arrayNode), count)
 
         default:
             throw Error.parser(.errorInvalidSyntax)
@@ -65,7 +59,7 @@ private extension Parser {
     }
 
     /// First token MUST be `.syntax(.openBrace)`.
-    func parseObject(_ tokens: ArraySlice<Token>) throws -> ParsingResult {
+    func parseObject(_ tokens: ArraySlice<Token>) throws -> (ObjectNode, Int) {
 
         // tokens can't be empty, we already check on the caller side
         let first = tokens.first!
@@ -75,57 +69,29 @@ private extension Parser {
         }
 
         guard second.kind != .syntax(.closeBrace) else { // `{}`
-            let objTokens = [
-                HighlightToken(kind: .syntax(.openBrace), range: first.range),
-                HighlightToken(kind: .syntax(.closeBrace), range: second.range)
-            ]
-
-            return (objTokens, 2)
+            let range = first.range.lowerBound..<second.range.upperBound
+            return (
+                ObjectNode(
+                    range: range,
+                    pairs: [],
+                    commaRanges: [],
+                    openBraceRange: first.range,
+                    closeBraceRange: second.range),
+                2)
         }
 
         var mutTokens = tokens.dropFirst()
-        var syntaxTokens = [
-            HighlightToken(kind: .syntax(.openBrace), range: first.range)
-        ]
+        var childPairs: [KeyValuePairNode] = []
+        var commaRanges: [ParseTree.Range] = []
+        var tokenCount: Int = 1
 
         while true {
-            guard let keyToken = mutTokens.first else {
-                throw Error.parser(.errorInvalidSyntax)
-            }
 
-            // parse string key
-            if case let .string(keyName) = keyToken.kind {
-                guard !keyName.isEmpty else {
-                    throw Error.parser("object key can't be empty string")
-                }
-
-                syntaxTokens.append(HighlightToken(kind: .key, range: keyToken.range))
-                mutTokens = mutTokens.dropFirst()
-
-            } else {
-                throw Error.parser("expecting string key in object")
-            }
-
-            // parse colon
-            guard
-                let colonToken = mutTokens.first,
-                case .syntax(.colon) = colonToken.kind
-            else {
-                throw Error.parser("expecting `:` after object key")
-            }
-
-            syntaxTokens.append(HighlightToken(
-                kind: .syntax(.colon),
-                range: colonToken.range))
-
-            mutTokens = mutTokens.dropFirst()
-
-            // parse value
-            let (parsedValue, parsedCount) = try parseJsonValue(mutTokens)
-            syntaxTokens.append(contentsOf: parsedValue)
+            let (pairNode, parsedCount) = try parseKeyValuePair(mutTokens)
+            childPairs.append(pairNode)
             mutTokens = mutTokens.dropFirst(parsedCount)
+            tokenCount += parsedCount
 
-            // parse closing brace or comma
             guard let nextToken = mutTokens.first else {
                 throw Error.parser("unexpected end of an object")
             }
@@ -133,20 +99,19 @@ private extension Parser {
             switch nextToken.kind {
 
             case .syntax(.closeBrace):
-                syntaxTokens.append(HighlightToken(
-                    kind: .syntax(.closeBrace),
-                    range: nextToken.range))
+                let arrayNode = ObjectNode(
+                    range: first.range.lowerBound..<nextToken.range.upperBound,
+                    pairs: childPairs,
+                    commaRanges: commaRanges,
+                    openBraceRange: first.range,
+                    closeBraceRange: nextToken.range)
 
-                mutTokens = mutTokens.dropFirst()
-
-                return (syntaxTokens, syntaxTokens.count)
+                return (arrayNode, tokenCount + 1)
 
             case .syntax(.comma):
-                syntaxTokens.append(HighlightToken(
-                    kind: .syntax(.comma),
-                    range: nextToken.range))
-
+                commaRanges.append(nextToken.range)
                 mutTokens = mutTokens.dropFirst()
+                tokenCount += 1
 
             default:
                 throw Error.parser("expecting `,` or `}` after key-value pair")
@@ -154,8 +119,48 @@ private extension Parser {
         }
     }
 
+    func parseKeyValuePair(
+        _ tokens: ArraySlice<Token>) throws -> (KeyValuePairNode, Int) {
+
+        guard let keyToken = tokens.first else {
+            throw Error.parser("unexpected end of an object")
+        }
+
+        // parse string key
+        guard case let .string(keyName) = keyToken.kind else {
+            throw Error.parser("expecting string key in object")
+        }
+
+        guard !keyName.isEmpty else {
+            throw Error.parser("object key can't be empty string")
+        }
+
+        var mutTokens = tokens.dropFirst()
+
+        // parse colon
+        guard
+            let colonToken = mutTokens.first,
+            case .syntax(.colon) = colonToken.kind
+        else {
+            throw Error.parser("expecting `:` after object key")
+        }
+
+        mutTokens = mutTokens.dropFirst()
+
+        // parse value
+        let (parsedValue, parsedCount) = try parseJsonValue(mutTokens)
+
+        let pairNode = KeyValuePairNode(
+            range: keyToken.range.lowerBound..<parsedValue.range.upperBound,
+            key: StringNode(range: keyToken.range),
+            value: parsedValue,
+            colonRange: colonToken.range)
+
+        return (pairNode, parsedCount + 2)
+    }
+
     /// First token MUST be `.syntax(.openBracket)`.
-    func parseArray(_ tokens: ArraySlice<Token>) throws -> ParsingResult {
+    func parseArray(_ tokens: ArraySlice<Token>) throws -> (ArrayNode, Int) {
 
         // tokens can't be empty, we have check on the caller side
         let first = tokens.first!
@@ -165,24 +170,28 @@ private extension Parser {
         }
 
         guard second.kind != .syntax(.closeBracket) else { // `[]`
-            let arrayTokens = [
-                HighlightToken(kind: .syntax(.openBracket), range: first.range),
-                HighlightToken(kind: .syntax(.closeBracket), range: second.range)
-            ]
-
-            return (arrayTokens, 2)
+            let range = first.range.lowerBound..<second.range.upperBound
+            return (
+                ArrayNode(
+                    range: range,
+                    items: [],
+                    commaRanges: [],
+                    openBracketRange: first.range,
+                    closeBracketRange: second.range),
+                2)
         }
 
         var mutTokens = tokens.dropFirst()
-        var syntaxTokens: [HighlightToken] = [
-            HighlightToken(kind: .syntax(.openBracket), range: first.range)
-        ]
+        var childItems: [ParseTree] = []
+        var commaRanges: [ParseTree.Range] = []
+        var tokenCount: Int = 1
 
         while true {
 
-            let (parsedValue, parsedCount) = try parseJsonValue(mutTokens)
-            syntaxTokens.append(contentsOf: parsedValue)
+            let (parsed, parsedCount) = try parseJsonValue(mutTokens)
+            childItems.append(parsed)
             mutTokens = mutTokens.dropFirst(parsedCount)
+            tokenCount += parsedCount
 
             // parse closing bracket or comma
             guard let nextToken = mutTokens.first else {
@@ -192,20 +201,19 @@ private extension Parser {
             switch nextToken.kind {
 
             case .syntax(.closeBracket):
-                syntaxTokens.append(HighlightToken(
-                    kind: .syntax(.closeBracket),
-                    range: nextToken.range))
+                let arrayNode = ArrayNode(
+                    range: first.range.lowerBound..<nextToken.range.upperBound,
+                    items: childItems,
+                    commaRanges: commaRanges,
+                    openBracketRange: first.range,
+                    closeBracketRange: nextToken.range)
 
-                mutTokens = mutTokens.dropFirst()
-
-                return (syntaxTokens, syntaxTokens.count)
+                return (arrayNode, tokenCount + 1)
 
             case .syntax(.comma):
-                syntaxTokens.append(HighlightToken(
-                    kind: .syntax(.comma),
-                    range: nextToken.range))
-
+                commaRanges.append(nextToken.range)
                 mutTokens = mutTokens.dropFirst()
+                tokenCount += 1
 
             default:
                 throw Error.parser("expecting `,` or `]` after value in array")
@@ -213,9 +221,8 @@ private extension Parser {
         }
     }
 
-    func parseNumber(_ str: String) throws -> HighlightToken.Kind {
+    func parseNumber(_ str: String) throws {
         try str.validateNumber()
-        return .numberValue
     }
 }
 

@@ -122,5 +122,8 @@ final class ParserTests: XCTestCase {
 }
 
 private func parse(_ str: String) throws -> [HighlightToken.Kind] {
-    return try JsonSyntax().parse(str).map { $0.kind }
+    let tree = try JsonSyntax().parse(str)
+    let tokens = tree.getHighlightTokens().map { $0.kind }
+
+    return tokens
 }

@@ -10,7 +10,7 @@
 public struct JsonSyntax {
     public init() {}
 
-    public func parse(_ str: String) throws -> [HighlightToken] {
+    public func parse(_ str: String) throws -> ParseTree {
         let tokens = try Lexer().lex(str)
         return try Parser().parse(tokens)
     }

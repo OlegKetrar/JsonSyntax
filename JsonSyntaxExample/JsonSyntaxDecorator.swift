@@ -25,7 +25,7 @@ struct JsonSyntaxDecorator: CodeSyntaxHighlighter {
         let tokens: [HighlightToken]
 
         do {
-            tokens = try JsonSyntax().parse(jsonStr)
+            tokens = try JsonSyntax().parse(jsonStr).getHighlightTokens()
         } catch {
             tokens = []
             print("invalid JSON")

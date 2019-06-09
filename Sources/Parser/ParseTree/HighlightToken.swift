@@ -1,6 +1,6 @@
 //
 //  HighlightToken.swift
-//  JsonSyntax iOS
+//  JsonSyntax
 //
 //  Created by Oleg Ketrar on 06/06/2019.
 //  Copyright © 2019 Oleg Ketrar. All rights reserved.
@@ -17,7 +17,7 @@ public struct HighlightToken: Equatable {
     }
 
     public var kind: Kind
-    public var range: Range<String.Index>
+    public var pos: Pos
 }
 
 public enum SyntaxCharacter: Character, Equatable {

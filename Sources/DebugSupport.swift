@@ -22,7 +22,7 @@ extension Error: CustomStringConvertible {
 extension HighlightToken: CustomStringConvertible {
 
     public var description: String {
-        return "\(kind), range: \(range.lowerBound) - \(range.upperBound)"
+        return "\(kind), pos: \(pos)"
     }
 }
 
@@ -31,7 +31,7 @@ extension HighlightToken: CustomStringConvertible {
 extension Token: CustomStringConvertible {
 
     var description: String {
-        return "kind: \(kind), range: \(range.lowerBound) - \(range.upperBound)"
+        return "kind: \(kind), pos: \(pos)"
     }
 }
 
@@ -40,10 +40,17 @@ extension Token.Kind: CustomStringConvertible {
     var description: String {
 
         switch self {
+        case .string: return "string"
         case let .syntax(s): return "syntax(\(s))"
-        case let .string(s): return "string(\(s))"
         case let .number(d): return "number(\(d))"
         case let .literal(l): return "literal\(l)"
         }
+    }
+}
+
+extension Pos: CustomStringConvertible {
+
+    public var description: String {
+        return "\(start) ..< \(end)"
     }
 }

@@ -6,6 +6,8 @@
 //  Copyright © 2019 Oleg Ketrar. All rights reserved.
 //
 
+#warning("fix numbers parsing")
+
 struct Parser {
 
     func parse(_ tokens: [Token]) throws -> ParseTree {
@@ -37,21 +39,21 @@ private extension Parser {
         switch token.kind {
         case let .number(valStr):
             try parseNumber(valStr)
-            return (.numberNode(token.range), 1)
+            return (.number(token.pos), 1)
 
         case .string:
-            return (.stringNode(token.range), 1)
+            return (.string(token.pos), 1)
 
         case let .literal(val):
-            return (.literalNode(token.range, val), 1)
+            return (.literal(token.pos, val), 1)
 
         case .syntax(.openBrace):
-            let (objectNode, count) = try parseObject(tokens)
-            return (.object(objectNode), count)
+            let (node, count) = try parseObject(tokens)
+            return (.object(node), count)
 
         case .syntax(.openBracket):
-            let (arrayNode, count) = try parseArray(tokens)
-            return (.array(arrayNode), count)
+            let (node, count) = try parseArray(tokens)
+            return (.array(node), count)
 
         default:
             throw Error.parser(.errorInvalidSyntax)
@@ -59,7 +61,7 @@ private extension Parser {
     }
 
     /// First token MUST be `.syntax(.openBrace)`.
-    func parseObject(_ tokens: ArraySlice<Token>) throws -> (ObjectNode, Int) {
+    func parseObject(_ tokens: ArraySlice<Token>) throws -> (ParseTree.Object, Int) {
 
         // tokens can't be empty, we already check on the caller side
         let first = tokens.first!
@@ -69,20 +71,18 @@ private extension Parser {
         }
 
         guard second.kind != .syntax(.closeBrace) else { // `{}`
-            let range = first.range.lowerBound..<second.range.upperBound
             return (
-                ObjectNode(
-                    range: range,
+                ParseTree.Object(
+                    pos: .from(first.pos.start, to: second.pos.end),
                     pairs: [],
-                    commaRanges: [],
-                    openBraceRange: first.range,
-                    closeBraceRange: second.range),
-                2)
+                    commas: []),
+                2
+            )
         }
 
         var mutTokens = tokens.dropFirst()
-        var childPairs: [KeyValuePairNode] = []
-        var commaRanges: [ParseTree.Range] = []
+        var childPairs: [ParseTree.KeyValue] = []
+        var commaPos: [Pos] = []
         var tokenCount: Int = 1
 
         while true {
@@ -99,17 +99,15 @@ private extension Parser {
             switch nextToken.kind {
 
             case .syntax(.closeBrace):
-                let arrayNode = ObjectNode(
-                    range: first.range.lowerBound..<nextToken.range.upperBound,
+                let objNode = ParseTree.Object(
+                    pos: .from(first.pos.start, to: nextToken.pos.end),
                     pairs: childPairs,
-                    commaRanges: commaRanges,
-                    openBraceRange: first.range,
-                    closeBraceRange: nextToken.range)
+                    commas: commaPos)
 
-                return (arrayNode, tokenCount + 1)
+                return (objNode, tokenCount + 1)
 
             case .syntax(.comma):
-                commaRanges.append(nextToken.range)
+                commaPos.append(nextToken.pos)
                 mutTokens = mutTokens.dropFirst()
                 tokenCount += 1
 
@@ -120,19 +118,15 @@ private extension Parser {
     }
 
     func parseKeyValuePair(
-        _ tokens: ArraySlice<Token>) throws -> (KeyValuePairNode, Int) {
+        _ tokens: ArraySlice<Token>) throws -> (ParseTree.KeyValue, Int) {
 
         guard let keyToken = tokens.first else {
             throw Error.parser("unexpected end of an object")
         }
 
         // parse string key
-        guard case let .string(keyName) = keyToken.kind else {
+        guard case .string = keyToken.kind else {
             throw Error.parser("expecting string key in object")
-        }
-
-        guard !keyName.isEmpty else {
-            throw Error.parser("object key can't be empty string")
         }
 
         var mutTokens = tokens.dropFirst()
@@ -150,17 +144,16 @@ private extension Parser {
         // parse value
         let (parsedValue, parsedCount) = try parseJsonValue(mutTokens)
 
-        let pairNode = KeyValuePairNode(
-            range: keyToken.range.lowerBound..<parsedValue.range.upperBound,
-            key: StringNode(range: keyToken.range),
+        let pair = ParseTree.KeyValue(
+            keyPos: keyToken.pos,
             value: parsedValue,
-            colonRange: colonToken.range)
+            colonPos: colonToken.pos)
 
-        return (pairNode, parsedCount + 2)
+        return (pair, parsedCount + 2)
     }
 
     /// First token MUST be `.syntax(.openBracket)`.
-    func parseArray(_ tokens: ArraySlice<Token>) throws -> (ArrayNode, Int) {
+    func parseArray(_ tokens: ArraySlice<Token>) throws -> (ParseTree.Array, Int) {
 
         // tokens can't be empty, we have check on the caller side
         let first = tokens.first!
@@ -170,20 +163,17 @@ private extension Parser {
         }
 
         guard second.kind != .syntax(.closeBracket) else { // `[]`
-            let range = first.range.lowerBound..<second.range.upperBound
             return (
-                ArrayNode(
-                    range: range,
+                ParseTree.Array(
+                    pos: .from(first.pos.start, to: second.pos.end),
                     items: [],
-                    commaRanges: [],
-                    openBracketRange: first.range,
-                    closeBracketRange: second.range),
+                    commas: []),
                 2)
         }
 
         var mutTokens = tokens.dropFirst()
         var childItems: [ParseTree] = []
-        var commaRanges: [ParseTree.Range] = []
+        var commaPos: [Pos] = []
         var tokenCount: Int = 1
 
         while true {
@@ -201,17 +191,15 @@ private extension Parser {
             switch nextToken.kind {
 
             case .syntax(.closeBracket):
-                let arrayNode = ArrayNode(
-                    range: first.range.lowerBound..<nextToken.range.upperBound,
+                let arrayNode = ParseTree.Array(
+                    pos: .from(first.pos.start, to: nextToken.pos.end),
                     items: childItems,
-                    commaRanges: commaRanges,
-                    openBracketRange: first.range,
-                    closeBracketRange: nextToken.range)
+                    commas: commaPos)
 
                 return (arrayNode, tokenCount + 1)
 
             case .syntax(.comma):
-                commaRanges.append(nextToken.range)
+                commaPos.append(nextToken.pos)
                 mutTokens = mutTokens.dropFirst()
                 tokenCount += 1
 
@@ -326,7 +314,7 @@ private extension Character {
     }
 }
 
-private extension ArraySlice {
+extension ArraySlice {
 
     func item(atAdjustedIndex index: Int) -> Element? {
         let lowerBound = indices.lowerBound

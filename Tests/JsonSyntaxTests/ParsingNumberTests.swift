@@ -48,9 +48,9 @@ private extension ParsingNumberTests {
 
     func parse(_ str: String) throws -> Bool {
 
-        let strRange = str.startIndex..<str.endIndex
-        let token = Token(kind: .number(str), range: strRange)
-        let expected = HighlightToken(kind: .numberValue, range: strRange)
+        let strPos = Pos.range(0..<str.utf8CString.endIndex)
+        let token = Token(kind: .number(str), pos: strPos)
+        let expected = HighlightToken(kind: .numberValue, pos: strPos)
         let parsedTokens = try Parser().parse([token]).getHighlightTokens()
 
         return parsedTokens.first == expected

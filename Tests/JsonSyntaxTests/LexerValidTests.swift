@@ -30,17 +30,15 @@ final class LexerValidTests: XCTestCase {
 
         XCTAssert(try lex(str) == [
             .syntax(.openBrace),
-            .string("name"),
+            .string,
             .syntax(.colon),
-            .string("escaped \" quote"),
+            .string,
             .syntax(.closeBrace)
         ])
     }
 
     func testStringEscaping() {
-        XCTAssert(try lex(#""abc\nde\tb \r \\aaa \/ a""#) == [
-            .string("abc\nde\tb \r \\aaa / a")
-        ])
+        XCTAssert(try lex(#""abc\nde\tb \r \\aaa \/ a""#) == [.string])
     }
 
     func testInvalidStringUnbalancedQuotes() {
@@ -56,9 +54,9 @@ final class LexerValidTests: XCTestCase {
 
         XCTAssert(try lex(str) == [
             .syntax(.openBrace),
-            .string("name"),
+            .string,
             .syntax(.colon),
-            .string("Ivan"),
+            .string,
             .syntax(.closeBrace)
         ])
     }
@@ -68,13 +66,13 @@ final class LexerValidTests: XCTestCase {
 
         XCTAssert(try lex(str) == [
             .syntax(.openBrace),
-            .string("name"),
+            .string,
             .syntax(.colon),
-            .string("Ivan"),
+            .string,
             .syntax(.comma),
-            .string("surname"),
+            .string,
             .syntax(.colon),
-            .string("Petrovich"),
+            .string,
             .syntax(.closeBrace)
         ])
     }
@@ -84,9 +82,9 @@ final class LexerValidTests: XCTestCase {
 
         XCTAssert(try lex(str) == [
             .syntax(.openBrace),
-            .string("name"),
+            .string,
             .syntax(.colon),
-            .string(""),
+            .string,
             .syntax(.closeBrace)
         ])
     }
@@ -96,7 +94,7 @@ final class LexerValidTests: XCTestCase {
 
         XCTAssert(try lex(str) == [
             .syntax(.openBrace),
-            .string("age"),
+            .string,
             .syntax(.colon),
             .number("10"),
             .syntax(.closeBrace)
@@ -108,15 +106,15 @@ final class LexerValidTests: XCTestCase {
 
         XCTAssert(try lex(str) == [
             .syntax(.openBrace),
-            .string("name"),
+            .string,
             .syntax(.colon),
-            .string("Ivan"),
+            .string,
             .syntax(.comma),
-            .string("age"),
+            .string,
             .syntax(.colon),
             .number("10"),
             .syntax(.comma),
-            .string("male"),
+            .string,
             .syntax(.colon),
             .literal(.true),
             .syntax(.closeBrace)
@@ -130,13 +128,13 @@ final class LexerValidTests: XCTestCase {
 
         XCTAssert(try lex(str) == [
             .syntax(.openBracket),
-            .string("a"),
+            .string,
             .syntax(.comma),
-            .string("ab"),
+            .string,
             .syntax(.comma),
-            .string("abc"),
+            .string,
             .syntax(.comma),
-            .string("abcd"),
+            .string,
             .syntax(.closeBracket)
         ])
     }

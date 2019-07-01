@@ -12,6 +12,8 @@ import XCTest
 final class LexerStringTests: XCTestCase {
 
     func testValid() {
+        XCTAssert(try Lexer().lex("") == [])
+
         XCTAssert(try lex("\"\""))
         XCTAssert(try lex(#""name""#))
         XCTAssert(try lex(#""name""#))
@@ -31,7 +33,7 @@ final class LexerStringTests: XCTestCase {
         XCTAssertThrowsError(try lex(#""\uFFFS""#))
         XCTAssertThrowsError(try lex(#""\u00F""#))
         XCTAssertThrowsError(try lex(#""\\\""#))
-//        XCTAssertThrowsError(try lex(#""\uD800""#))
+        XCTAssertThrowsError(try lex(#""\uD800""#))
         XCTAssertThrowsError(try lex(#""\z""#))
         XCTAssertThrowsError(try lex(#""\""#))
         XCTAssertThrowsError(try lex(#""\"#))

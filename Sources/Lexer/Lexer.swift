@@ -11,7 +11,7 @@
 struct Lexer {
 
     func lex(_ string: String) throws -> [Token] {
- 
+
         var buffer = CCharIterator(string)
         var tokens: [Token] = []
 
@@ -195,9 +195,9 @@ private extension CChar {
 
     var isWhitespace: Bool {
         return self == 0x20 // space
-            || self == 0x9  // tab
-            || self == 0xA  // newline
-            || self == 0xD  // carriage return
+            || self == 0x9 // tab
+            || self == 0xA // newline
+            || self == 0xD // carriage return
     }
 
     var isDecDigit: Bool {
@@ -222,12 +222,12 @@ private extension CChar {
     var isEscapedCharacter: Bool {
         return self == .quote
             || self == .backslash
-            || self == 0x6E //  \n
-            || self == 0x72 //  \r
-            || self == 0x74 //  \t
-            || self == 0x2F //  //
-            || self == 0x62 //  \b
-            || self == 0x66 //  \f
+            || self == 0x6E // \n
+            || self == 0x72 // \r
+            || self == 0x74 // \t
+            || self == 0x2F // //
+            || self == 0x62 // \b
+            || self == 0x66 // \f
     }
 
     var character: Character {

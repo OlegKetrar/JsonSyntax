@@ -314,7 +314,7 @@ private extension Character {
     }
 }
 
-extension ArraySlice {
+private extension ArraySlice {
 
     func item(atAdjustedIndex index: Int) -> Element? {
         let lowerBound = indices.lowerBound

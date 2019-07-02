@@ -98,7 +98,6 @@
 		OBJ_31 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
 		OBJ_36 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		OBJ_37 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		OBJ_38 /* Gemfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Gemfile; sourceTree = "<group>"; };
 		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		OBJ_8 /* DebugSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSupport.swift; sourceTree = "<group>"; };
 		OBJ_9 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
@@ -209,7 +208,6 @@
 				OBJ_37 /* README.md */,
 				OBJ_36 /* LICENSE */,
 				OBJ_6 /* Package.swift */,
-				OBJ_38 /* Gemfile */,
 				OBJ_7 /* Sources */,
 				OBJ_21 /* Tests */,
 				OBJ_32 /* Products */,
@@ -309,7 +307,6 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 			);
 			mainGroup = OBJ_5;

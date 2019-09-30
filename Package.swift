@@ -14,6 +14,11 @@ let package = Package(
             name: "JsonSyntax",
             type: .dynamic,
             targets: ["JsonSyntax"]),
+
+        .library(
+            name: "JsonSyntax-Static",
+            type: .static,
+            targets: ["JsonSyntax"]),
     ],
     dependencies: [],
     targets: [

@@ -3,88 +3,58 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 52;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		"JsonSyntax::JsonSyntaxPackageTests::ProductTarget" /* JsonSyntaxPackageTests */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = OBJ_72 /* Build configuration list for PBXAggregateTarget "JsonSyntaxPackageTests" */;
-			buildPhases = (
-			);
-			dependencies = (
-				OBJ_75 /* PBXTargetDependency */,
-				OBJ_76 /* PBXTargetDependency */,
-			);
-			name = JsonSyntaxPackageTests;
-			productName = JsonSyntaxPackageTests;
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
-		551802A322CBD5C60068E884 /* CCharIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551802A122CBD4D10068E884 /* CCharIterator.swift */; };
-		OBJ_44 /* ParsingNumberFuzzTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* ParsingNumberFuzzTests.swift */; };
-		OBJ_45 /* TrustedParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* TrustedParser.swift */; };
-		OBJ_47 /* JsonSyntax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "JsonSyntax::JsonSyntax::Product" /* JsonSyntax.framework */; };
-		OBJ_54 /* DebugSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_8 /* DebugSupport.swift */; };
-		OBJ_55 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* Error.swift */; };
-		OBJ_56 /* JsonSyntax.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* JsonSyntax.swift */; };
-		OBJ_57 /* Lexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* Lexer.swift */; };
-		OBJ_58 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* Token.swift */; };
-		OBJ_59 /* HighlightToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* HighlightToken.swift */; };
-		OBJ_61 /* ParseTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* ParseTree.swift */; };
-		OBJ_62 /* SyntaxScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* SyntaxScope.swift */; };
-		OBJ_63 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* Parser.swift */; };
-		OBJ_70 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
-		OBJ_82 /* LexerStringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* LexerStringTests.swift */; };
-		OBJ_83 /* LexerValidTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_27 /* LexerValidTests.swift */; };
-		OBJ_84 /* ParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_28 /* ParserTests.swift */; };
-		OBJ_85 /* ParsingNumberTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_29 /* ParsingNumberTests.swift */; };
-		OBJ_86 /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_30 /* PerformanceTests.swift */; };
-		OBJ_87 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_31 /* SampleData.swift */; };
-		OBJ_89 /* JsonSyntax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "JsonSyntax::JsonSyntax::Product" /* JsonSyntax.framework */; };
+		OBJ_43 /* ParsingNumberFuzzTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* ParsingNumberFuzzTests.swift */; };
+		OBJ_44 /* TrustedParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* TrustedParser.swift */; };
+		OBJ_46 /* JsonSyntax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "JsonSyntax::JsonSyntax::Product" /* JsonSyntax.framework */; };
+		OBJ_53 /* DebugSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_8 /* DebugSupport.swift */; };
+		OBJ_54 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* Error.swift */; };
+		OBJ_55 /* JsonSyntax.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* JsonSyntax.swift */; };
+		OBJ_56 /* CCharIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* CCharIterator.swift */; };
+		OBJ_57 /* Lexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* Lexer.swift */; };
+		OBJ_58 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* Token.swift */; };
+		OBJ_59 /* HighlightToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* HighlightToken.swift */; };
+		OBJ_60 /* ParseTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* ParseTree.swift */; };
+		OBJ_61 /* SyntaxScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* SyntaxScope.swift */; };
+		OBJ_62 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* Parser.swift */; };
+		OBJ_86 /* LexerStringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* LexerStringTests.swift */; };
+		OBJ_87 /* LexerValidTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_27 /* LexerValidTests.swift */; };
+		OBJ_88 /* ParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_28 /* ParserTests.swift */; };
+		OBJ_89 /* ParsingNumberTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_29 /* ParsingNumberTests.swift */; };
+		OBJ_90 /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_30 /* PerformanceTests.swift */; };
+		OBJ_91 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_31 /* SampleData.swift */; };
+		OBJ_93 /* JsonSyntax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "JsonSyntax::JsonSyntax::Product" /* JsonSyntax.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		55D4FA2F22C0122800013D4E /* PBXContainerItemProxy */ = {
+		55208747234138730049EDBA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = "JsonSyntax::JsonSyntax";
 			remoteInfo = JsonSyntax;
 		};
-		55D4FA3022C0122800013D4E /* PBXContainerItemProxy */ = {
+		55208748234138730049EDBA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = "JsonSyntax::JsonSyntax";
 			remoteInfo = JsonSyntax;
-		};
-		55D4FA3122C0122800013D4E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = OBJ_1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = "JsonSyntax::FuzzTests";
-			remoteInfo = FuzzTests;
-		};
-		55D4FA3222C0122800013D4E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = OBJ_1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = "JsonSyntax::JsonSyntaxTests";
-			remoteInfo = JsonSyntaxTests;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		551802A122CBD4D10068E884 /* CCharIterator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCharIterator.swift; sourceTree = "<group>"; };
-		"JsonSyntax::FuzzTests::Product" /* FuzzTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = FuzzTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		"JsonSyntax::JsonSyntax::Product" /* JsonSyntax.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JsonSyntax.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		"JsonSyntax::JsonSyntaxTests::Product" /* JsonSyntaxTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = JsonSyntaxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		"JsonSyntax::FuzzTests::Product" /* FuzzTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = FuzzTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		"JsonSyntax::JsonSyntax::Product" /* JsonSyntax.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = JsonSyntax.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		"JsonSyntax::JsonSyntaxTests::Product" /* JsonSyntaxTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = JsonSyntaxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_10 /* JsonSyntax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonSyntax.swift; sourceTree = "<group>"; };
-		OBJ_12 /* Lexer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lexer.swift; sourceTree = "<group>"; };
-		OBJ_13 /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
-		OBJ_16 /* HighlightToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightToken.swift; sourceTree = "<group>"; };
+		OBJ_12 /* CCharIterator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCharIterator.swift; sourceTree = "<group>"; };
+		OBJ_13 /* Lexer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lexer.swift; sourceTree = "<group>"; };
+		OBJ_14 /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
+		OBJ_17 /* HighlightToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightToken.swift; sourceTree = "<group>"; };
 		OBJ_18 /* ParseTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseTree.swift; sourceTree = "<group>"; };
 		OBJ_19 /* SyntaxScope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntaxScope.swift; sourceTree = "<group>"; };
 		OBJ_20 /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
@@ -104,26 +74,26 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		OBJ_46 /* Frameworks */ = {
+		OBJ_45 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_47 /* JsonSyntax.framework in Frameworks */,
+				OBJ_46 /* JsonSyntax.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_64 /* Frameworks */ = {
+		OBJ_63 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_88 /* Frameworks */ = {
+		OBJ_92 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_89 /* JsonSyntax.framework in Frameworks */,
+				OBJ_93 /* JsonSyntax.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,26 +103,26 @@
 		OBJ_11 /* Lexer */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_12 /* Lexer.swift */,
-				551802A122CBD4D10068E884 /* CCharIterator.swift */,
-				OBJ_13 /* Token.swift */,
+				OBJ_12 /* CCharIterator.swift */,
+				OBJ_13 /* Lexer.swift */,
+				OBJ_14 /* Token.swift */,
 			);
 			path = Lexer;
 			sourceTree = "<group>";
 		};
-		OBJ_14 /* Parser */ = {
+		OBJ_15 /* Parser */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_15 /* ParseTree */,
+				OBJ_16 /* ParseTree */,
 				OBJ_20 /* Parser.swift */,
 			);
 			path = Parser;
 			sourceTree = "<group>";
 		};
-		OBJ_15 /* ParseTree */ = {
+		OBJ_16 /* ParseTree */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_16 /* HighlightToken.swift */,
+				OBJ_17 /* HighlightToken.swift */,
 				OBJ_18 /* ParseTree.swift */,
 				OBJ_19 /* SyntaxScope.swift */,
 			);
@@ -195,8 +165,8 @@
 		OBJ_32 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				"JsonSyntax::JsonSyntaxTests::Product" /* JsonSyntaxTests.xctest */,
 				"JsonSyntax::FuzzTests::Product" /* FuzzTests.xctest */,
+				"JsonSyntax::JsonSyntaxTests::Product" /* JsonSyntaxTests.xctest */,
 				"JsonSyntax::JsonSyntax::Product" /* JsonSyntax.framework */,
 			);
 			name = Products;
@@ -205,12 +175,12 @@
 		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
-				OBJ_37 /* README.md */,
-				OBJ_36 /* LICENSE */,
 				OBJ_6 /* Package.swift */,
 				OBJ_7 /* Sources */,
 				OBJ_21 /* Tests */,
 				OBJ_32 /* Products */,
+				OBJ_36 /* LICENSE */,
+				OBJ_37 /* README.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -221,7 +191,7 @@
 				OBJ_9 /* Error.swift */,
 				OBJ_10 /* JsonSyntax.swift */,
 				OBJ_11 /* Lexer */,
-				OBJ_14 /* Parser */,
+				OBJ_15 /* Parser */,
 			);
 			path = Sources;
 			sourceTree = SOURCE_ROOT;
@@ -231,15 +201,15 @@
 /* Begin PBXNativeTarget section */
 		"JsonSyntax::FuzzTests" /* FuzzTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_40 /* Build configuration list for PBXNativeTarget "FuzzTests" */;
+			buildConfigurationList = OBJ_39 /* Build configuration list for PBXNativeTarget "FuzzTests" */;
 			buildPhases = (
-				OBJ_43 /* Sources */,
-				OBJ_46 /* Frameworks */,
+				OBJ_42 /* Sources */,
+				OBJ_45 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				OBJ_48 /* PBXTargetDependency */,
+				OBJ_47 /* PBXTargetDependency */,
 			);
 			name = FuzzTests;
 			productName = FuzzTests;
@@ -248,10 +218,10 @@
 		};
 		"JsonSyntax::JsonSyntax" /* JsonSyntax */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_50 /* Build configuration list for PBXNativeTarget "JsonSyntax" */;
+			buildConfigurationList = OBJ_49 /* Build configuration list for PBXNativeTarget "JsonSyntax" */;
 			buildPhases = (
-				OBJ_53 /* Sources */,
-				OBJ_64 /* Frameworks */,
+				OBJ_52 /* Sources */,
+				OBJ_63 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -264,34 +234,20 @@
 		};
 		"JsonSyntax::JsonSyntaxTests" /* JsonSyntaxTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_78 /* Build configuration list for PBXNativeTarget "JsonSyntaxTests" */;
+			buildConfigurationList = OBJ_82 /* Build configuration list for PBXNativeTarget "JsonSyntaxTests" */;
 			buildPhases = (
-				OBJ_81 /* Sources */,
-				OBJ_88 /* Frameworks */,
+				OBJ_85 /* Sources */,
+				OBJ_92 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				OBJ_90 /* PBXTargetDependency */,
+				OBJ_94 /* PBXTargetDependency */,
 			);
 			name = JsonSyntaxTests;
 			productName = JsonSyntaxTests;
 			productReference = "JsonSyntax::JsonSyntaxTests::Product" /* JsonSyntaxTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		"JsonSyntax::SwiftPMPackageDescription" /* JsonSyntaxPackageDescription */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_66 /* Build configuration list for PBXNativeTarget "JsonSyntaxPackageDescription" */;
-			buildPhases = (
-				OBJ_69 /* Sources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = JsonSyntaxPackageDescription;
-			productName = JsonSyntaxPackageDescription;
-			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
@@ -303,8 +259,8 @@
 				LastUpgradeCheck = 9999;
 			};
 			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "JsonSyntax" */;
-			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			compatibilityVersion = "Xcode 11.0";
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -316,83 +272,63 @@
 			targets = (
 				"JsonSyntax::FuzzTests" /* FuzzTests */,
 				"JsonSyntax::JsonSyntax" /* JsonSyntax */,
-				"JsonSyntax::SwiftPMPackageDescription" /* JsonSyntaxPackageDescription */,
-				"JsonSyntax::JsonSyntaxPackageTests::ProductTarget" /* JsonSyntaxPackageTests */,
 				"JsonSyntax::JsonSyntaxTests" /* JsonSyntaxTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		OBJ_43 /* Sources */ = {
+		OBJ_42 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_44 /* ParsingNumberFuzzTests.swift in Sources */,
-				OBJ_45 /* TrustedParser.swift in Sources */,
+				OBJ_43 /* ParsingNumberFuzzTests.swift in Sources */,
+				OBJ_44 /* TrustedParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_53 /* Sources */ = {
+		OBJ_52 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_54 /* DebugSupport.swift in Sources */,
-				OBJ_55 /* Error.swift in Sources */,
-				OBJ_56 /* JsonSyntax.swift in Sources */,
+				OBJ_53 /* DebugSupport.swift in Sources */,
+				OBJ_54 /* Error.swift in Sources */,
+				OBJ_55 /* JsonSyntax.swift in Sources */,
+				OBJ_56 /* CCharIterator.swift in Sources */,
 				OBJ_57 /* Lexer.swift in Sources */,
 				OBJ_58 /* Token.swift in Sources */,
 				OBJ_59 /* HighlightToken.swift in Sources */,
-				OBJ_61 /* ParseTree.swift in Sources */,
-				551802A322CBD5C60068E884 /* CCharIterator.swift in Sources */,
-				OBJ_62 /* SyntaxScope.swift in Sources */,
-				OBJ_63 /* Parser.swift in Sources */,
+				OBJ_60 /* ParseTree.swift in Sources */,
+				OBJ_61 /* SyntaxScope.swift in Sources */,
+				OBJ_62 /* Parser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_69 /* Sources */ = {
+		OBJ_85 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_70 /* Package.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		OBJ_81 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 0;
-			files = (
-				OBJ_82 /* LexerStringTests.swift in Sources */,
-				OBJ_83 /* LexerValidTests.swift in Sources */,
-				OBJ_84 /* ParserTests.swift in Sources */,
-				OBJ_85 /* ParsingNumberTests.swift in Sources */,
-				OBJ_86 /* PerformanceTests.swift in Sources */,
-				OBJ_87 /* SampleData.swift in Sources */,
+				OBJ_86 /* LexerStringTests.swift in Sources */,
+				OBJ_87 /* LexerValidTests.swift in Sources */,
+				OBJ_88 /* ParserTests.swift in Sources */,
+				OBJ_89 /* ParsingNumberTests.swift in Sources */,
+				OBJ_90 /* PerformanceTests.swift in Sources */,
+				OBJ_91 /* SampleData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		OBJ_48 /* PBXTargetDependency */ = {
+		OBJ_47 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "JsonSyntax::JsonSyntax" /* JsonSyntax */;
-			targetProxy = 55D4FA2F22C0122800013D4E /* PBXContainerItemProxy */;
+			targetProxy = 55208747234138730049EDBA /* PBXContainerItemProxy */;
 		};
-		OBJ_75 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = "JsonSyntax::FuzzTests" /* FuzzTests */;
-			targetProxy = 55D4FA3122C0122800013D4E /* PBXContainerItemProxy */;
-		};
-		OBJ_76 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = "JsonSyntax::JsonSyntaxTests" /* JsonSyntaxTests */;
-			targetProxy = 55D4FA3222C0122800013D4E /* PBXContainerItemProxy */;
-		};
-		OBJ_90 /* PBXTargetDependency */ = {
+		OBJ_94 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "JsonSyntax::JsonSyntax" /* JsonSyntax */;
-			targetProxy = 55D4FA3022C0122800013D4E /* PBXContainerItemProxy */;
+			targetProxy = 55208748234138730049EDBA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -412,15 +348,18 @@
 					"SWIFT_PACKAGE=1",
 					"DEBUG=1",
 				);
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_SWIFT_FLAGS = "-DXcode";
+				OTHER_SWIFT_FLAGS = "$(inherited) -DXcode";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SWIFT_PACKAGE DEBUG";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
 				USE_HEADERMAP = NO;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
 		};
@@ -437,18 +376,22 @@
 					"$(inherited)",
 					"SWIFT_PACKAGE=1",
 				);
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				OTHER_SWIFT_FLAGS = "-DXcode";
+				OTHER_SWIFT_FLAGS = "$(inherited) -DXcode";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SWIFT_PACKAGE";
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
 				USE_HEADERMAP = NO;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
 		};
-		OBJ_41 /* Debug */ = {
+		OBJ_40 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
@@ -459,9 +402,13 @@
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = JsonSyntax.xcodeproj/FuzzTests_Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@loader_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
@@ -473,7 +420,7 @@
 			};
 			name = Debug;
 		};
-		OBJ_42 /* Release */ = {
+		OBJ_41 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
@@ -484,9 +431,13 @@
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = JsonSyntax.xcodeproj/FuzzTests_Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@loader_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
@@ -498,7 +449,7 @@
 			};
 			name = Release;
 		};
-		OBJ_51 /* Debug */ = {
+		OBJ_50 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
@@ -508,9 +459,12 @@
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = JsonSyntax.xcodeproj/JsonSyntax_Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(TOOLCHAIN_DIR)/usr/lib/swift/macosx",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
@@ -526,7 +480,7 @@
 			};
 			name = Debug;
 		};
-		OBJ_52 /* Release */ = {
+		OBJ_51 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
@@ -536,9 +490,12 @@
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = JsonSyntax.xcodeproj/JsonSyntax_Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(TOOLCHAIN_DIR)/usr/lib/swift/macosx",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
@@ -554,37 +511,7 @@
 			};
 			name = Release;
 		};
-		OBJ_67 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				LD = /usr/bin/true;
-				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk";
-				SWIFT_VERSION = 5.0;
-			};
-			name = Debug;
-		};
-		OBJ_68 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				LD = /usr/bin/true;
-				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk";
-				SWIFT_VERSION = 5.0;
-			};
-			name = Release;
-		};
-		OBJ_73 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-			};
-			name = Debug;
-		};
-		OBJ_74 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-			};
-			name = Release;
-		};
-		OBJ_79 /* Debug */ = {
+		OBJ_83 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
@@ -595,9 +522,13 @@
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = JsonSyntax.xcodeproj/JsonSyntaxTests_Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@loader_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
@@ -609,7 +540,7 @@
 			};
 			name = Debug;
 		};
-		OBJ_80 /* Release */ = {
+		OBJ_84 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
@@ -620,9 +551,13 @@
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = JsonSyntax.xcodeproj/JsonSyntaxTests_Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@loader_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
@@ -646,47 +581,29 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		OBJ_40 /* Build configuration list for PBXNativeTarget "FuzzTests" */ = {
+		OBJ_39 /* Build configuration list for PBXNativeTarget "FuzzTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_41 /* Debug */,
-				OBJ_42 /* Release */,
+				OBJ_40 /* Debug */,
+				OBJ_41 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		OBJ_50 /* Build configuration list for PBXNativeTarget "JsonSyntax" */ = {
+		OBJ_49 /* Build configuration list for PBXNativeTarget "JsonSyntax" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_51 /* Debug */,
-				OBJ_52 /* Release */,
+				OBJ_50 /* Debug */,
+				OBJ_51 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		OBJ_66 /* Build configuration list for PBXNativeTarget "JsonSyntaxPackageDescription" */ = {
+		OBJ_82 /* Build configuration list for PBXNativeTarget "JsonSyntaxTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_67 /* Debug */,
-				OBJ_68 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		OBJ_72 /* Build configuration list for PBXAggregateTarget "JsonSyntaxPackageTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				OBJ_73 /* Debug */,
-				OBJ_74 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		OBJ_78 /* Build configuration list for PBXNativeTarget "JsonSyntaxTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				OBJ_79 /* Debug */,
-				OBJ_80 /* Release */,
+				OBJ_83 /* Debug */,
+				OBJ_84 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

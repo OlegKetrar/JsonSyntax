@@ -4,8 +4,10 @@ import PackageDescription
 let package = Package(
     name: "JsonSyntax",
     platforms: [
-        .macOS(.v10_14),
-        .iOS(.v12),
+        .macOS(.v10_10),
+        .iOS(.v8),
+        .watchOS(.v2),
+        .tvOS(.v9)
     ],
     products: [
         .library(

@@ -1,26 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "9999"
+   LastUpgradeVersion = "1110"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
-      <BuildActionEntries>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "JsonSyntax::JsonSyntax"
-               BuildableName = "JsonSyntax.framework"
-               BlueprintName = "JsonSyntax"
-               ReferencedContainer = "container:JsonSyntax.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-      </BuildActionEntries>
    </BuildAction>
    <TestAction
       buildConfiguration = "Debug"
@@ -32,9 +16,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "JsonSyntax::JsonSyntaxTests"
-               BuildableName = "JsonSyntaxTests.xctest"
-               BlueprintName = "JsonSyntaxTests"
+               BlueprintIdentifier = "JsonSyntax::FuzzTests"
+               BuildableName = "FuzzTests.xctest"
+               BlueprintName = "FuzzTests"
                ReferencedContainer = "container:JsonSyntax.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -57,15 +41,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "JsonSyntax::JsonSyntax"
-            BuildableName = "JsonSyntax.framework"
-            BlueprintName = "JsonSyntax"
-            ReferencedContainer = "container:JsonSyntax.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

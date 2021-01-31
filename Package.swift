@@ -12,12 +12,16 @@ let package = Package(
     products: [
         .library(
             name: "JsonSyntax",
-            type: .dynamic,
             targets: ["JsonSyntax"]),
 
         .library(
             name: "JsonSyntax-Static",
             type: .static,
+            targets: ["JsonSyntax"]),
+
+        .library(
+            name: "JsonSyntax-Dynamic",
+            type: .dynamic,
             targets: ["JsonSyntax"]),
     ],
     dependencies: [],

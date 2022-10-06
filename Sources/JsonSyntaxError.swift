@@ -1,5 +1,5 @@
 //
-//  Error.swift
+//  JsonSyntaxError.swift
 //  JsonSyntax
 //
 //  Created by Oleg Ketrar on 20/05/2019.
@@ -8,7 +8,8 @@
 
 #warning("add `Pos` to error")
 
-public enum Error: Swift.Error {
+public enum JsonSyntaxError: Swift.Error {
     case lexer(String)
     case parser(String)
+    case conversionDataToStringUTF8
 }

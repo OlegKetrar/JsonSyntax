@@ -44,6 +44,6 @@ final class PerformanceTests: XCTestCase {
 extension Swift.Error {
 
     var description: String {
-        return (self as? Error)?.description ?? localizedDescription
+        return (self as? JsonSyntaxError)?.description ?? localizedDescription
     }
 }

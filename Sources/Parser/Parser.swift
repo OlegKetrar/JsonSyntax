@@ -13,13 +13,13 @@ struct Parser {
     func parse(_ tokens: [Token]) throws -> ParseTree {
 
         guard !tokens.isEmpty else {
-            throw Error.parser("no tokens available")
+            throw JsonSyntaxError.parser("no tokens available")
         }
 
         let (parsed, parsedTokensCount) = try parseJsonValue(tokens[...])
 
         guard parsedTokensCount == tokens.count else {
-            throw Error.parser(.errorInvalidSyntax)
+            throw JsonSyntaxError.parser(.errorInvalidSyntax)
         }
 
         return parsed
@@ -33,7 +33,7 @@ private extension Parser {
     func parseJsonValue(_ tokens: ArraySlice<Token>) throws -> (ParseTree, Int) {
 
         guard let token = tokens.first else {
-            throw Error.parser(.errorInvalidSyntax)
+            throw JsonSyntaxError.parser(.errorInvalidSyntax)
         }
 
         switch token.kind {
@@ -56,7 +56,7 @@ private extension Parser {
             return (.array(node), count)
 
         default:
-            throw Error.parser(.errorInvalidSyntax)
+            throw JsonSyntaxError.parser(.errorInvalidSyntax)
         }
     }
 
@@ -67,7 +67,7 @@ private extension Parser {
         let first = tokens.first!
 
         guard let second = tokens.item(atAdjustedIndex: 1) else {
-            throw Error.parser(.errorInvalidSyntax)
+            throw JsonSyntaxError.parser(.errorInvalidSyntax)
         }
 
         guard second.kind != .syntax(.closeBrace) else { // `{}`
@@ -93,7 +93,7 @@ private extension Parser {
             tokenCount += parsedCount
 
             guard let nextToken = mutTokens.first else {
-                throw Error.parser("unexpected end of an object")
+                throw JsonSyntaxError.parser("unexpected end of an object")
             }
 
             switch nextToken.kind {
@@ -112,7 +112,7 @@ private extension Parser {
                 tokenCount += 1
 
             default:
-                throw Error.parser("expecting `,` or `}` after key-value pair")
+                throw JsonSyntaxError.parser("expecting `,` or `}` after key-value pair")
             }
         }
     }
@@ -121,12 +121,12 @@ private extension Parser {
         _ tokens: ArraySlice<Token>) throws -> (ParseTree.KeyValue, Int) {
 
         guard let keyToken = tokens.first else {
-            throw Error.parser("unexpected end of an object")
+            throw JsonSyntaxError.parser("unexpected end of an object")
         }
 
         // parse string key
         guard case .string = keyToken.kind else {
-            throw Error.parser("expecting string key in object")
+            throw JsonSyntaxError.parser("expecting string key in object")
         }
 
         var mutTokens = tokens.dropFirst()
@@ -136,7 +136,7 @@ private extension Parser {
             let colonToken = mutTokens.first,
             case .syntax(.colon) = colonToken.kind
         else {
-            throw Error.parser("expecting `:` after object key")
+            throw JsonSyntaxError.parser("expecting `:` after object key")
         }
 
         mutTokens = mutTokens.dropFirst()
@@ -159,7 +159,7 @@ private extension Parser {
         let first = tokens.first!
 
         guard let second = tokens.item(atAdjustedIndex: 1) else {
-            throw Error.parser(.errorInvalidSyntax)
+            throw JsonSyntaxError.parser(.errorInvalidSyntax)
         }
 
         guard second.kind != .syntax(.closeBracket) else { // `[]`
@@ -185,7 +185,7 @@ private extension Parser {
 
             // parse closing bracket or comma
             guard let nextToken = mutTokens.first else {
-                throw Error.parser("unexpected end of an array")
+                throw JsonSyntaxError.parser("unexpected end of an array")
             }
 
             switch nextToken.kind {
@@ -204,7 +204,7 @@ private extension Parser {
                 tokenCount += 1
 
             default:
-                throw Error.parser("expecting `,` or `]` after value in array")
+                throw JsonSyntaxError.parser("expecting `,` or `]` after value in array")
             }
         }
     }
@@ -224,16 +224,16 @@ private extension String {
 
     func validateNumber() throws {
         guard let firstChar = first else {
-            throw Error.parser("Number token can't be empty string")
+            throw JsonSyntaxError.parser("Number token can't be empty string")
         }
 
         guard firstChar == "-" || firstChar.isJsonNumber else {
-            throw Error.parser("Number token should start with `-` or digit")
+            throw JsonSyntaxError.parser("Number token should start with `-` or digit")
         }
 
         guard count > 1 else {
             guard firstChar.isJsonNumber else {
-                throw Error.parser("Only digits are valid chars for 1-length number")
+                throw JsonSyntaxError.parser("Only digits are valid chars for 1-length number")
             }
 
             return
@@ -248,7 +248,7 @@ private extension String {
 
                 if indices.contains(thirdIndex) {
                     guard self[thirdIndex].isDotOrExp else {
-                        throw Error.parser("Leading zeros are not allowed")
+                        throw JsonSyntaxError.parser("Leading zeros are not allowed")
                     }
 
                 } else {
@@ -259,7 +259,7 @@ private extension String {
         } else {
             if firstChar == "0" {
                 guard secondChar.isDotOrExp else {
-                    throw Error.parser("Leading zeros are not allowed")
+                    throw JsonSyntaxError.parser("Leading zeros are not allowed")
                 }
             }
         }
@@ -286,14 +286,14 @@ private extension String {
                 hasDot = true
 
             default:
-                throw Error.parser("invalid number")
+                throw JsonSyntaxError.parser("invalid number")
             }
 
             previousChar = char
         }
 
         guard last?.isJsonNumber == true else {
-            throw Error.parser("Unexpected end of number token")
+            throw JsonSyntaxError.parser("Unexpected end of number token")
         }
     }
 }

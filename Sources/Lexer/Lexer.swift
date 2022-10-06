@@ -9,6 +9,7 @@
 #warning("Add line index to Pos")
 
 struct Lexer {
+    var isStrictMode: Bool = true
 
     func lex(_ string: String) throws -> [Token] {
 
@@ -43,7 +44,7 @@ struct Lexer {
                 tokens.append(Token(kind: .syntax(syntaxChar), pos: .one(index)))
             } else {
                 // TODO: add line & index error payload
-                throw Error.lexer("unexpected character: \(char.character)")
+                throw JsonSyntaxError.lexer("unexpected character: \(char.character)")
             }
         }
 
@@ -65,8 +66,11 @@ private extension Lexer {
         buffer.dropNext()
 
         while let char = buffer.consumeNext() {
-            guard char > 0 else {
-                throw Error.lexer("Non-ASCII characters should be escaped")
+
+            if isStrictMode {
+                guard char > 0 else {
+                    throw JsonSyntaxError.lexer("Non-ASCII characters should be escaped")
+                }
             }
 
             if char == .quote {
@@ -78,7 +82,7 @@ private extension Lexer {
             }
         }
 
-        throw Error.lexer("Expected end-of-string quote")
+        throw JsonSyntaxError.lexer("Expected end-of-string quote")
     }
 
     func lexEscapeSequence(_ buffer: inout CCharIterator) throws {
@@ -91,10 +95,10 @@ private extension Lexer {
             break
 
         case let .some(char):
-            throw Error.lexer("Unexpected escaped character \(char.character)")
+            throw JsonSyntaxError.lexer("Unexpected escaped character \(char.character)")
 
         case .none:
-            throw Error.lexer("Expected escaped character")
+            throw JsonSyntaxError.lexer("Expected escaped character")
         }
     }
 
@@ -112,19 +116,19 @@ private extension Lexer {
 
         case (true, false):
             guard buffer.consumePrefix(#"\u"#) else {
-                throw Error.lexer("Invalid unicode literal sequence")
+                throw JsonSyntaxError.lexer("Invalid unicode literal sequence")
             }
 
             let trailCodeUnit = try lexUnicodeCodeUnit(&buffer)
 
             guard UTF16.isTrailSurrogate(trailCodeUnit) else {
-                throw Error.lexer("Invalid unicode literal sequence")
+                throw JsonSyntaxError.lexer("Invalid unicode literal sequence")
             }
 
         case (false, true), (true, true):
             // Surrogates must always come in pairs.
             // trail surrogate must come after lead surrogate
-            throw Error.lexer("Invalid unicode literal sequence")
+            throw JsonSyntaxError.lexer("Invalid unicode literal sequence")
         }
     }
 
@@ -132,18 +136,18 @@ private extension Lexer {
 
         let hexChars: [Character] = try (0..<4).map { _ in
             guard let char = buffer.consumeNext() else {
-                throw Error.lexer("Unexpected end of unicode literal")
+                throw JsonSyntaxError.lexer("Unexpected end of unicode literal")
             }
 
             guard char.isHexDigit else {
-                throw Error.lexer("Unexpected character \(char.character)")
+                throw JsonSyntaxError.lexer("Unexpected character \(char.character)")
             }
 
             return char.character
         }
 
         guard let codeUnit = UInt16(String(hexChars), radix: 16) else {
-            throw Error.lexer("Invalid unicode sequence")
+            throw JsonSyntaxError.lexer("Invalid unicode sequence")
         }
 
         return codeUnit

@@ -6,13 +6,16 @@
 //  Copyright © 2019 Oleg Ketrar. All rights reserved.
 //
 
-extension Error: CustomStringConvertible {
+extension JsonSyntaxError: CustomStringConvertible {
 
     public var description: String {
 
         switch self {
         case let .lexer(str): return "lexer -> \(str)"
         case let .parser(str): return "parser -> \(str)"
+
+        case .conversionDataToStringUTF8:
+            return "failed conversion from Data to Utf8 String"
         }
     }
 }

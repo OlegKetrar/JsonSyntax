@@ -28,7 +28,7 @@ struct CCharIterator {
 
         let oldIndex = index
         var charPrefix = prefix.utf8CString
-        charPrefix.removeLast()
+        charPrefix.removeLast() // remove last `\0`
 
         for char in charPrefix {
             guard consumeNext() == char else {
@@ -52,15 +52,5 @@ struct CCharIterator {
 
     var hasMore: Bool {
         return chars.indices.contains(index)
-    }
-}
-
-// MARK: - Convenience
-
-private extension Collection where Index == Int {
-
-    func item(at index: Int) -> Element? {
-        guard indices.contains(index) else { return nil }
-        return self[index]
     }
 }

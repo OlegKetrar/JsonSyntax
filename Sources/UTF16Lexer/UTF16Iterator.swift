@@ -27,10 +27,12 @@ struct UTF16Iterator {
         let oldIndex = index
 
         for char in prefix.utf16 {
-            guard consumeNext() == char else {
+            guard getCurrent() == char else {
                 index = oldIndex
                 return false
             }
+
+            dropNext()
         }
 
         return true

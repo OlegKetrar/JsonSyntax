@@ -122,7 +122,7 @@ final class ParserTests: XCTestCase {
 }
 
 private func parse(_ str: String) throws -> [HighlightToken.Kind] {
-    let tree = try JsonSyntax().parse(str)
+    let tree = try JsonSyntax().parse(prettyPrinted: str)
     let tokens = tree.getHighlightTokens().map { $0.kind }
 
     return tokens

@@ -1,18 +1,16 @@
 //
-//  Lexer.swift
+//  UTF16Lexer.swift
 //  JsonSyntax
 //
-//  Created by Oleg Ketrar on 17/05/2019.
-//  Copyright © 2019 Oleg Ketrar. All rights reserved.
+//  Created by Oleg Ketrar on 07.10.2022.
+//  Copyright © 2022 Oleg Ketrar. All rights reserved.
 //
 
-#warning("Add line index to Pos")
-
-struct Lexer {
+struct UTF16Lexer {
 
     func lex(_ string: String) throws -> [Token] {
 
-        var buffer = CCharIterator(string)
+        var buffer = UTF16Iterator(string)
         var tokens: [Token] = []
 
         while buffer.hasMore {
@@ -37,13 +35,13 @@ struct Lexer {
                 fatalError()
             }
 
-            if char.isWhitespace {
+            if char.int8?.isWhitespace == true {
                 continue
-            } else if let syntaxChar = SyntaxCharacter(rawValue: char) {
+            } else if let syntaxChar = SyntaxCharacter(utf16Value: char) {
                 tokens.append(Token(kind: .syntax(syntaxChar), pos: .one(index)))
             } else {
                 // TODO: add line & index error payload
-                throw JsonSyntaxError.lexer("unexpected character: \(char.character)")
+                throw JsonSyntaxError.lexer("unexpected character: \(char)")
             }
         }
 
@@ -51,16 +49,16 @@ struct Lexer {
     }
 }
 
-// MARK: - Private
-
-private extension Lexer {
+private extension UTF16Lexer {
     typealias LexingResult = (type: Token.Kind, length: Int)
 
-    func lexString(_ buffer: inout CCharIterator) throws -> Int? {
+    func lexString(_ buffer: inout UTF16Iterator) throws -> Int? {
         let startIndex = buffer.index
 
-        guard let firstChar = buffer.getCurrent(),
-            firstChar == .quote else { return nil }
+        guard
+            let firstChar = buffer.getCurrent(),
+            firstChar.int8 == .quote
+        else { return nil }
 
         buffer.dropNext()
 
@@ -69,11 +67,11 @@ private extension Lexer {
                 throw JsonSyntaxError.lexer("Non-ASCII characters should be escaped")
             }
 
-            if char == .quote {
+            if char.int8 == .quote {
                 return buffer.index - startIndex
             }
 
-            if char == .backslash {
+            if char.int8 == .backslash {
                 try lexEscapeSequence(&buffer)
             }
         }
@@ -81,24 +79,24 @@ private extension Lexer {
         throw JsonSyntaxError.lexer("Expected end-of-string quote")
     }
 
-    func lexEscapeSequence(_ buffer: inout CCharIterator) throws {
+    func lexEscapeSequence(_ buffer: inout UTF16Iterator) throws {
         switch buffer.consumeNext() {
 
-        case .some(0x75):
+        case .some(0x75): // u
             try lexUnicodeSequence(&buffer)
 
-        case let .some(char) where char.isEscapedCharacter:
+        case let .some(char) where char.int8?.isEscapedCharacter == true:
             break
 
         case let .some(char):
-            throw JsonSyntaxError.lexer("Unexpected escaped character \(char.character)")
+            throw JsonSyntaxError.lexer("Unexpected escaped character \(char)")
 
         case .none:
             throw JsonSyntaxError.lexer("Expected escaped character")
         }
     }
 
-    func lexUnicodeSequence(_ buffer: inout CCharIterator) throws {
+    func lexUnicodeSequence(_ buffer: inout UTF16Iterator) throws {
         let codeUnit = try lexUnicodeCodeUnit(&buffer)
 
         let isLeadSurrogate = UTF16.isLeadSurrogate(codeUnit)
@@ -128,18 +126,22 @@ private extension Lexer {
         }
     }
 
-    func lexUnicodeCodeUnit(_ buffer: inout CCharIterator) throws -> UTF16.CodeUnit {
+    func lexUnicodeCodeUnit(_ buffer: inout UTF16Iterator) throws -> UTF16.CodeUnit {
 
         let hexChars: [Character] = try (0..<4).map { _ in
             guard let char = buffer.consumeNext() else {
                 throw JsonSyntaxError.lexer("Unexpected end of unicode literal")
             }
 
-            guard char.isHexDigit else {
-                throw JsonSyntaxError.lexer("Unexpected character \(char.character)")
+            guard char.int8?.isHexDigit == true else {
+                throw JsonSyntaxError.lexer("Unexpected character \(char)")
             }
 
-            return char.character
+            if let character = char.character {
+                return character
+            } else {
+                throw JsonSyntaxError.lexer("Unexpected character \(char)")
+            }
         }
 
         guard let codeUnit = UInt16(String(hexChars), radix: 16) else {
@@ -149,7 +151,7 @@ private extension Lexer {
         return codeUnit
     }
 
-    func lexLiteral(_ chars: inout CCharIterator) -> LexingResult? {
+    func lexLiteral(_ chars: inout UTF16Iterator) -> LexingResult? {
 
         switch true {
         case chars.consumePrefix(Literal.true.rawValue):
@@ -166,15 +168,18 @@ private extension Lexer {
         }
     }
 
-    func lexNumber(_ buffer: inout CCharIterator) -> LexingResult? {
+    func lexNumber(_ buffer: inout UTF16Iterator) -> LexingResult? {
         var jsonNumber = ""
         var length: Int = 0
 
         while let char = buffer.getCurrent() {
-            guard char.isNumber else { break }
+            guard
+                char.int8?.isNumber == true,
+                let character = char.character
+            else { break }
 
             buffer.dropNext()
-            jsonNumber.append(char.character)
+            jsonNumber.append(character)
             length += 1
         }
 

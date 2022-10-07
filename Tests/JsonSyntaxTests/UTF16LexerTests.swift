@@ -1,27 +1,26 @@
 //
-//  LexerStringTests.swift
-//  JsonSyntaxTests
+//  UTF16LexerTests.swift
+//  JsonSyntax
 //
-//  Created by Oleg Ketrar on 01/06/2019.
-//  Copyright © 2019 Oleg Ketrar. All rights reserved.
+//  Created by Oleg Ketrar on 07.10.2022.
 //
 
 import XCTest
 @testable import JsonSyntax
 
-class LexerStringTests: XCTestCase {
+final class UTF16LexerTests: XCTestCase {
 
     func test_emptyString_empty() {
-        XCTAssert(try Lexer().lex("") == [])
+        XCTAssert(try UTF16Lexer().lex("") == [])
     }
-/*
-    func test_unicodeStringValue_softMode() throws {
+
+    func test_unicodeStringValue() throws {
         try lex(#""ывф фв""#)
         try lex(#""💩""#)
         try lex(#""€""#)
     }
-*/
-    func test_strictMode_valid() throws {
+
+    func test_valid() throws {
         try lex("\"\"")
         try lex(#""name""#)
         try lex(#""name""#)
@@ -35,7 +34,7 @@ class LexerStringTests: XCTestCase {
         try lex(#""\uffff""#)
     }
 
-    func test_strictMode_invalid() {
+    func test_invalid() {
         XCTAssertThrowsError(try lex("\""))
         XCTAssertThrowsError(try lex(#""\u""#))
         XCTAssertThrowsError(try lex(#""\uFFFS""#))
@@ -45,12 +44,10 @@ class LexerStringTests: XCTestCase {
         XCTAssertThrowsError(try lex(#""\z""#))
         XCTAssertThrowsError(try lex(#""\""#))
         XCTAssertThrowsError(try lex(#""\"#))
-        XCTAssertThrowsError(try lex(#""ывф фв""#))
-        XCTAssertThrowsError(try lex(#""💩""#))
     }
 }
 
-private extension LexerStringTests {
+private extension UTF16LexerTests {
 
     func lex(
         _ str: String,
@@ -58,13 +55,13 @@ private extension LexerStringTests {
         line: UInt = #line
     ) throws {
 
-        let utf8Count = str.utf8.count
-        let tokens = try Lexer().lex(str)
+        let utf16Count = (str as NSString).length
+        let tokens = try UTF16Lexer().lex(str)
 
         let token = try XCTUnwrap(tokens.first, file: file, line: line)
 
         XCTAssertEqual(token.kind, .string, file: file, line: line)
         XCTAssertEqual(token.pos.start, 0, "start", file: file, line: line)
-        XCTAssertEqual(token.pos.length, utf8Count, "length", file: file, line: line)
+        XCTAssertEqual(token.pos.length, utf16Count, "length", file: file, line: line)
     }
 }

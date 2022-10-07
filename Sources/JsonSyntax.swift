@@ -20,8 +20,8 @@ public struct JsonSyntax {
         return try Parser().parse(tokens)
     }
 
-    public func parse(_ str: String) throws -> ParseTree {
-        let tokens = try Lexer().lex(str)
+    public func parse(prettyPrinted str: String) throws -> ParseTree {
+        let tokens = try UTF16Lexer().lex(str)
         return try Parser().parse(tokens)
     }
 }

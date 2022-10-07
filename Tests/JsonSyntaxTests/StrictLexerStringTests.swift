@@ -10,20 +10,17 @@ import XCTest
 @testable import JsonSyntax
 
 class LexerStringTests: XCTestCase {
-    var isStrict: Bool = true
 
     func test_emptyString_empty() {
-        XCTAssert(try Lexer(isStrictMode: true).lex("") == [])
+        XCTAssert(try Lexer().lex("") == [])
     }
-
+/*
     func test_unicodeStringValue_softMode() throws {
-        isStrict = false
-
         try lex(#""ывф фв""#)
         try lex(#""💩""#)
         try lex(#""€""#)
     }
-
+*/
     func test_strictMode_valid() throws {
         try lex("\"\"")
         try lex(#""name""#)
@@ -62,7 +59,7 @@ private extension LexerStringTests {
     ) throws {
 
         let utf8Count = str.utf8.count
-        let tokens = try Lexer(isStrictMode: isStrict).lex(str)
+        let tokens = try Lexer().lex(str)
 
         let token = try XCTUnwrap(tokens.first, file: file, line: line)
 

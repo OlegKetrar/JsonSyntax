@@ -9,7 +9,6 @@
 #warning("Add line index to Pos")
 
 struct Lexer {
-    var isStrictMode: Bool = true
 
     func lex(_ string: String) throws -> [Token] {
 
@@ -66,11 +65,8 @@ private extension Lexer {
         buffer.dropNext()
 
         while let char = buffer.consumeNext() {
-
-            if isStrictMode {
-                guard char > 0 else {
-                    throw JsonSyntaxError.lexer("Non-ASCII characters should be escaped")
-                }
+            guard char > 0 else {
+                throw JsonSyntaxError.lexer("Non-ASCII characters should be escaped")
             }
 
             if char == .quote {

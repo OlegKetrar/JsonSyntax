@@ -16,12 +16,12 @@ public struct JsonSyntax {
             throw JsonSyntaxError.conversionDataToStringUTF8
         }
 
-        let tokens = try Lexer(isStrictMode: true).lex(str)
+        let tokens = try Lexer().lex(str)
         return try Parser().parse(tokens)
     }
 
     public func parse(_ str: String) throws -> ParseTree {
-        let tokens = try Lexer(isStrictMode: false).lex(str)
+        let tokens = try Lexer().lex(str)
         return try Parser().parse(tokens)
     }
 }

@@ -5,22 +5,7 @@
 //  Created by Oleg Ketrar on 19.10.2024.
 //
 
-import Foundation
-
-public enum JsonPathComponent: Equatable {
-    case object(String)
-    case array(Int)
-
-    public static func ==(lhs: Self, rhs: Self) -> Bool {
-        switch (lhs, rhs) {
-        case (.object, .object): return true
-        case (.array, .array): return true
-        default: return false
-        }
-    }
-}
-
-public struct JsonPath: Equatable {
+public struct JsonPath: Equatable, CustomStringConvertible {
     private var head: JsonPathComponent
     private var tail: [JsonPathComponent]
 
@@ -49,29 +34,33 @@ public struct JsonPath: Equatable {
     public mutating func append(_ path: JsonPathComponent) {
         tail.append(path)
     }
+
+    public var description: String {
+        array
+            .enumerated()
+            .map { index, item in
+                var str = ""
+
+                if case .object = item, index != 0 {
+                    str.append(".")
+                }
+
+                str.append(item.description)
+
+                return str
+            }
+            .joined()
+    }
 }
 
-enum NativeJson {
-    case object([String : Any])
-    case array([Any])
+public enum JsonPathComponent: Equatable, CustomStringConvertible {
+    case object(String)
+    case array(Int)
 
-    init?(_ jsonData: Data) {
-        guard let obj = try? JSONSerialization.jsonObject(with: jsonData) else {
-            return nil
+    public var description: String {
+        switch self {
+        case let .object(key): return key
+        case let .array(index): return "[\(index)]"
         }
-
-        if let dict = obj as? [String : Any] {
-            self = .object(dict)
-
-        } else if let array = obj as? [Any] {
-            self = .array(array)
-
-        } else {
-            return nil
-        }
-    }
-
-    mutating func replace(at path: JsonPath, value: String) {
-
-    }
+   }
 }

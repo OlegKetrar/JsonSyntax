@@ -61,7 +61,7 @@ private extension Parser {
     }
 
     /// First token MUST be `.syntax(.openBrace)`.
-    func parseObject(_ tokens: ArraySlice<Token>) throws -> (ParseTree.Object, Int) {
+    func parseObject(_ tokens: ArraySlice<Token>) throws -> (ParseTree.Obj, Int) {
 
         // tokens can't be empty, we already check on the caller side
         let first = tokens.first!
@@ -72,7 +72,7 @@ private extension Parser {
 
         guard second.kind != .syntax(.closeBrace) else { // `{}`
             return (
-                ParseTree.Object(
+                ParseTree.Obj(
                     pos: .from(first.pos.start, to: second.pos.end),
                     pairs: [],
                     commas: []),
@@ -99,7 +99,7 @@ private extension Parser {
             switch nextToken.kind {
 
             case .syntax(.closeBrace):
-                let objNode = ParseTree.Object(
+                let objNode = ParseTree.Obj(
                     pos: .from(first.pos.start, to: nextToken.pos.end),
                     pairs: childPairs,
                     commas: commaPos)
@@ -118,7 +118,8 @@ private extension Parser {
     }
 
     func parseKeyValuePair(
-        _ tokens: ArraySlice<Token>) throws -> (ParseTree.KeyValue, Int) {
+        _ tokens: ArraySlice<Token>
+    ) throws -> (ParseTree.KeyValue, Int) {
 
         guard let keyToken = tokens.first else {
             throw JsonSyntaxError.parser("unexpected end of an object")
@@ -153,7 +154,7 @@ private extension Parser {
     }
 
     /// First token MUST be `.syntax(.openBracket)`.
-    func parseArray(_ tokens: ArraySlice<Token>) throws -> (ParseTree.Array, Int) {
+    func parseArray(_ tokens: ArraySlice<Token>) throws -> (ParseTree.Arr, Int) {
 
         // tokens can't be empty, we have check on the caller side
         let first = tokens.first!
@@ -164,7 +165,7 @@ private extension Parser {
 
         guard second.kind != .syntax(.closeBracket) else { // `[]`
             return (
-                ParseTree.Array(
+                ParseTree.Arr(
                     pos: .from(first.pos.start, to: second.pos.end),
                     items: [],
                     commas: []),
@@ -191,7 +192,7 @@ private extension Parser {
             switch nextToken.kind {
 
             case .syntax(.closeBracket):
-                let arrayNode = ParseTree.Array(
+                let arrayNode = ParseTree.Arr(
                     pos: .from(first.pos.start, to: nextToken.pos.end),
                     items: childItems,
                     commas: commaPos)

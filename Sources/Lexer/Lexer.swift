@@ -59,8 +59,7 @@ private extension Lexer {
     func lexString(_ buffer: inout CCharIterator) throws -> Int? {
         let startIndex = buffer.index
 
-        guard let firstChar = buffer.getCurrent(),
-            firstChar == .quote else { return nil }
+        guard buffer.getCurrent() == .quote else { return nil }
 
         buffer.dropNext()
 

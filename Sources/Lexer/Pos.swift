@@ -27,19 +27,23 @@ public struct Pos: Equatable {
         return location + length
     }
 
-    static func range(_ r: Range<Int>) -> Pos {
+    public func contains(_ pos: Pos) -> Bool {
+        pos.start >= start && pos.end <= end
+    }
+
+    public static func range(_ r: Range<Int>) -> Pos {
         return .init(location: r.lowerBound, length: r.upperBound - r.lowerBound)
     }
 
-    static func from(_ location: Int, _ length: Int) -> Pos {
+    public static func from(_ location: Int, _ length: Int) -> Pos {
         return .init(location: location, length: length)
     }
 
-    static func from(_ start: Int, to end: Int) -> Pos {
+    public static func from(_ start: Int, to end: Int) -> Pos {
         return range(start..<end)
     }
 
-    static func one(_ location: Int) -> Pos {
+    public static func one(_ location: Int) -> Pos {
         return .from(location, 1)
     }
 }

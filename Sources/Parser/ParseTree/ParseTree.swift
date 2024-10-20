@@ -6,20 +6,32 @@
 //  Copyright © 2019 Oleg Ketrar. All rights reserved.
 //
 
-public enum ParseTree: Equatable {
-    public typealias Index = Int
-    public typealias Range = Swift.Range<Index>
+import Foundation
 
-    public struct Array: Equatable {
+public enum ParseTree: Equatable {
+
+    public struct Arr: Equatable {
         public var pos: Pos
         public var items: [ParseTree]
         public var commas: [Pos]
+
+        public init(pos: Pos, items: [ParseTree], commas: [Pos]) {
+            self.pos = pos
+            self.items = items
+            self.commas = commas
+        }
     }
 
-    public struct Object: Equatable {
+    public struct Obj: Equatable {
         public var pos: Pos
         public var pairs: [KeyValue]
         public var commas: [Pos]
+
+        public init(pos: Pos, pairs: [KeyValue], commas: [Pos]) {
+            self.pos = pos
+            self.pairs = pairs
+            self.commas = commas
+        }
     }
 
     public struct KeyValue: Equatable {
@@ -34,13 +46,23 @@ public enum ParseTree: Equatable {
             self.value = value
             self.colonPos = colonPos
         }
+
+        public var keyNamePos: Pos {
+            var pos = Pos.from(keyPos.location + 1, keyPos.length - 2)
+
+            if pos.length < 0 {
+                pos.length = 0
+            }
+
+            return pos
+        }
     }
 
     case string(Pos)
     case number(Pos)
     case literal(Pos, Literal)
-    indirect case array(Array)
-    indirect case object(Object)
+    indirect case array(Arr)
+    indirect case object(Obj)
 }
 
 public extension ParseTree {
@@ -57,7 +79,7 @@ public extension ParseTree {
 
     func getHighlightTokens() -> [HighlightToken] {
         var tokens: [HighlightToken] = []
-        traversHighlightTokens(into: &tokens)
+        traverseHighlightTokens(into: &tokens)
 
         return tokens
     }
@@ -68,13 +90,74 @@ public extension ParseTree {
 
         return scopes
     }
+
+    func getJsonKeyPath(for text: String, at position: Pos) -> JsonPath? {
+        switch self {
+        case .object, .array:
+            guard
+                let components = findPathRecursevelly(in: text, at: position),
+                let first = components.first
+            else { return nil }
+
+            return JsonPath(
+                head: first,
+                tail: Swift.Array(components.dropFirst()))
+
+        default:
+            return nil
+        }
+    }
 }
 
 // MARK: - Traversing
 
 private extension ParseTree {
 
-    func traversHighlightTokens(into array: inout [HighlightToken]) {
+    func resolveKeyPos(_ pos: Pos, _ text: String) -> String? {
+        let nsRange = NSRange(location: pos.location, length: pos.length)
+
+        if let range = Range<String.Index>(nsRange, in: text) {
+            return String(text[range])
+        } else {
+            return nil
+        }
+    }
+
+    func findPathRecursevelly(in text: String, at pos: Pos) -> [JsonPathComponent]? {
+
+        switch self {
+        case let .object(obj):
+            for pair in obj.pairs {
+                if pair.keyPos.contains(pos),
+                   let keyName = resolveKeyPos(pair.keyNamePos, text) {
+                    return [ .object(keyName) ]
+                }
+
+                if pair.value.pos.contains(pos),
+                   let components = pair.value.findPathRecursevelly(in: text, at: pos),
+                   let keyName = resolveKeyPos(pair.keyNamePos, text) {
+
+                    return [ .object(keyName) ] + components
+                }
+            }
+
+        case let .array(arr):
+            for (index, item) in arr.items.enumerated() {
+                if item.pos.contains(pos),
+                   let components = item.findPathRecursevelly(in: text, at: pos) {
+
+                    return [ .array(index) ] + components
+                }
+            }
+
+        default:
+            break
+        }
+
+        return nil
+    }
+
+    func traverseHighlightTokens(into array: inout [HighlightToken]) {
 
         switch self {
         case let .string(p): array.append(.stringValue, p)
@@ -87,7 +170,7 @@ private extension ParseTree {
             var commaIterator = node.commas.makeIterator()
 
             for item in node.items {
-                item.traversHighlightTokens(into: &array)
+                item.traverseHighlightTokens(into: &array)
 
                 if let pos = commaIterator.next() {
                     array.append(.syntax(.comma), pos)
@@ -103,7 +186,7 @@ private extension ParseTree {
             for pair in node.pairs {
                 array.append(.key, pair.keyPos)
                 array.append(.syntax(.colon), pair.colonPos)
-                pair.value.traversHighlightTokens(into: &array)
+                pair.value.traverseHighlightTokens(into: &array)
 
                 if let pos = commaIterator.next() {
                     array.append(.syntax(.comma), pos)
